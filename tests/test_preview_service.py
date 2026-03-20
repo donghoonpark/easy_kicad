@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from easyeda2kicad.kicad.parameters_kicad_symbol import (
     KiPinStyle,
     KiPinType,
@@ -29,10 +31,10 @@ def test_render_footprint_svg_contains_pad_markup():
     assert 'transform="translate(' in svg
 
 
-def test_render_symbol_svg_rotates_vertical_pin_labels():
+def test_render_symbol_svg_places_labels_on_body_side_of_pins():
     symbol = KiSymbol(
         info=KiSymbolInfo(
-            name="VERTICAL_TEST",
+            name="PIN_LAYOUT_TEST",
             prefix="U",
             package="TEST",
             manufacturer="easy_kicad",
@@ -42,8 +44,28 @@ def test_render_symbol_svg_rotates_vertical_pin_labels():
         ),
         pins=[
             KiSymbolPin(
-                name="TOP_PIN",
+                name="LEFT_PIN",
                 number="1",
+                style=KiPinStyle.line,
+                length=5.08,
+                type=KiPinType._input,
+                orientation=180,
+                pos_x=-10.16,
+                pos_y=0,
+            ),
+            KiSymbolPin(
+                name="RIGHT_PIN",
+                number="2",
+                style=KiPinStyle.line,
+                length=5.08,
+                type=KiPinType.output,
+                orientation=0,
+                pos_x=10.16,
+                pos_y=0,
+            ),
+            KiSymbolPin(
+                name="TOP_PIN",
+                number="3",
                 style=KiPinStyle.line,
                 length=5.08,
                 type=KiPinType._input,
@@ -53,7 +75,7 @@ def test_render_symbol_svg_rotates_vertical_pin_labels():
             ),
             KiSymbolPin(
                 name="BOTTOM_PIN",
-                number="2",
+                number="4",
                 style=KiPinStyle.line,
                 length=5.08,
                 type=KiPinType.output,
@@ -67,5 +89,15 @@ def test_render_symbol_svg_rotates_vertical_pin_labels():
 
     svg = render_symbol_svg(symbol)
 
-    assert 'transform="rotate(-90' in svg
+    assert re.search(r'x1="-10\.16" y1="-?0\.00" x2="-5\.08" y2="-?0\.00"', svg)
+    assert re.search(r'x1="10\.16" y1="-?0\.00" x2="5\.08" y2="-?0\.00"', svg)
+    assert re.search(r'x1="0\.00" y1="-10\.16" x2="-?0\.00" y2="-5\.08"', svg)
+    assert re.search(r'x1="0\.00" y1="10\.16" x2="-?0\.00" y2="5\.08"', svg)
+    assert re.search(r'text x="-3\.28" y="-?0\.00" font-size="2\.1" fill="#006464" text-anchor="start"', svg)
+    assert re.search(r'text x="3\.28" y="-?0\.00" font-size="2\.1" fill="#006464" text-anchor="end"', svg)
+    assert re.search(r'text x="-?0\.00" y="-3\.28" font-size="2\.1" fill="#006464" text-anchor="middle"', svg)
+    assert re.search(r'text x="-?0\.00" y="3\.28" font-size="2\.1" fill="#006464" text-anchor="middle"', svg)
+    assert 'stroke="#840000"' in svg
+    assert 'fill="#f5f4ef"' in svg
     assert 'dominant-baseline="middle"' in svg
+    assert 'rotate(-90' not in svg

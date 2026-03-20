@@ -13,11 +13,16 @@ from easyeda2kicad.kicad.parameters_kicad_symbol import (
     KiSymbolPin,
 )
 
+SYMBOL_BACKGROUND = "#f5f4ef"
+SYMBOL_GRID = "rgba(181, 181, 181, 0.55)"
+SYMBOL_BODY_STROKE = "#840000"
+SYMBOL_BODY_FILL = "#ffffc2"
+SYMBOL_PIN_STROKE = "#840000"
+SYMBOL_PIN_LABEL = "#006464"
+
 PIN_LABEL_FONT_SIZE = 2.1
-VERTICAL_PIN_LABEL_FONT_SIZE = 1.8
 PIN_LABEL_OFFSET = 1.8
-PIN_LABEL_VERTICAL_X_OFFSET = 0.7
-PIN_LABEL_VERTICAL_Y_OFFSET = 1.2
+PIN_LABEL_VERTICAL_OFFSET = 1.8
 PIN_LABEL_CHAR_WIDTH = 0.62
 PIN_LABEL_LINE_HEIGHT = 1.0
 
@@ -29,8 +34,6 @@ class PinLabelLayout:
     y: float
     anchor: str
     font_size: float
-    is_vertical: bool
-    transform: Optional[str] = None
 
 
 def _svg_bounds(points: Iterable[tuple[float, float]], padding: float = 4.0) -> str:
@@ -93,6 +96,13 @@ def _pin_end(pin: KiSymbolPin) -> tuple[float, float]:
     return end_x, end_y
 
 
+def _pin_body_end(pin: KiSymbolPin) -> tuple[float, float]:
+    radians = math.radians(pin.orientation)
+    end_x = pin.pos_x - math.cos(radians) * pin.length
+    end_y = pin.pos_y - math.sin(radians) * pin.length
+    return end_x, end_y
+
+
 def _pin_orientation(pin: KiSymbolPin) -> int:
     return int(round(pin.orientation)) % 360
 
@@ -105,46 +115,36 @@ def _pin_label_layout(pin: KiSymbolPin, end_x: float, end_y: float) -> PinLabelL
     if orientation == 180:
         return PinLabelLayout(
             text=label_text,
-            x=end_x - PIN_LABEL_OFFSET,
+            x=end_x + PIN_LABEL_OFFSET,
             y=screen_end_y,
-            anchor="end",
+            anchor="start",
             font_size=PIN_LABEL_FONT_SIZE,
-            is_vertical=False,
         )
 
     if orientation == 90:
-        label_x = end_x + PIN_LABEL_VERTICAL_X_OFFSET
-        label_y = screen_end_y - PIN_LABEL_VERTICAL_Y_OFFSET
         return PinLabelLayout(
             text=label_text,
-            x=label_x,
-            y=label_y,
-            anchor="end",
-            font_size=VERTICAL_PIN_LABEL_FONT_SIZE,
-            is_vertical=True,
-            transform=f"rotate(-90 {label_x:.2f} {label_y:.2f})",
+            x=end_x,
+            y=screen_end_y + PIN_LABEL_VERTICAL_OFFSET,
+            anchor="middle",
+            font_size=PIN_LABEL_FONT_SIZE,
         )
 
     if orientation == 270:
-        label_x = end_x - PIN_LABEL_VERTICAL_X_OFFSET
-        label_y = screen_end_y + PIN_LABEL_VERTICAL_Y_OFFSET
         return PinLabelLayout(
             text=label_text,
-            x=label_x,
-            y=label_y,
-            anchor="start",
-            font_size=VERTICAL_PIN_LABEL_FONT_SIZE,
-            is_vertical=True,
-            transform=f"rotate(-90 {label_x:.2f} {label_y:.2f})",
+            x=end_x,
+            y=screen_end_y - PIN_LABEL_VERTICAL_OFFSET,
+            anchor="middle",
+            font_size=PIN_LABEL_FONT_SIZE,
         )
 
     return PinLabelLayout(
         text=label_text,
-        x=end_x + PIN_LABEL_OFFSET,
+        x=end_x - PIN_LABEL_OFFSET,
         y=screen_end_y,
-        anchor="start",
+        anchor="end",
         font_size=PIN_LABEL_FONT_SIZE,
-        is_vertical=False,
     )
 
 
@@ -152,41 +152,30 @@ def _pin_label_bounds(layout: PinLabelLayout) -> tuple[tuple[float, float], tupl
     text_width = max(len(layout.text), 1) * layout.font_size * PIN_LABEL_CHAR_WIDTH
     text_height = layout.font_size * PIN_LABEL_LINE_HEIGHT
 
-    if not layout.is_vertical:
-        if layout.anchor == "end":
-            min_x = layout.x - text_width
-            max_x = layout.x
-        elif layout.anchor == "middle":
-            min_x = layout.x - (text_width / 2)
-            max_x = layout.x + (text_width / 2)
-        else:
-            min_x = layout.x
-            max_x = layout.x + text_width
-        min_y = layout.y - (text_height / 2)
-        max_y = layout.y + (text_height / 2)
-        return (min_x, min_y), (max_x, max_y)
-
-    min_x = layout.x - (text_height / 2)
-    max_x = layout.x + (text_height / 2)
     if layout.anchor == "end":
-        min_y = layout.y - text_width
-        max_y = layout.y
+        min_x = layout.x - text_width
+        max_x = layout.x
+    elif layout.anchor == "middle":
+        min_x = layout.x - (text_width / 2)
+        max_x = layout.x + (text_width / 2)
     else:
-        min_y = layout.y
-        max_y = layout.y + text_width
+        min_x = layout.x
+        max_x = layout.x + text_width
+    min_y = layout.y - (text_height / 2)
+    max_y = layout.y + (text_height / 2)
     return (min_x, min_y), (max_x, max_y)
 
 
 def _symbol_bounds(symbol: KiSymbol) -> list[tuple[float, float]]:
     points: list[tuple[float, float]] = []
     for pin in symbol.pins:
-        end_x, end_y = _pin_end(pin)
-        label_layout = _pin_label_layout(pin, end_x, end_y)
+        body_x, body_y = _pin_body_end(pin)
+        label_layout = _pin_label_layout(pin, body_x, body_y)
         label_min, label_max = _pin_label_bounds(label_layout)
         points.extend(
             [
                 (pin.pos_x, _screen_y(pin.pos_y)),
-                (end_x, _screen_y(end_y)),
+                (body_x, _screen_y(body_y)),
                 label_min,
                 label_max,
             ]
@@ -225,7 +214,7 @@ def _render_bezier(bezier: KiSymbolBezier) -> str:
         points = " ".join(f"{point[0]:.2f},{_screen_y(point[1]):.2f}" for point in bezier.points)
         return (
             f'<polyline points="{points}" fill="none" '
-            'stroke="currentColor" stroke-width="0.3" />'
+            f'stroke="{SYMBOL_BODY_STROKE}" stroke-width="0.3" />'
         )
 
     first = bezier.points[0]
@@ -242,7 +231,7 @@ def _render_bezier(bezier: KiSymbolBezier) -> str:
             )
     return (
         f'<path d="{" ".join(path_parts)}" fill="none" '
-        'stroke="currentColor" stroke-width="0.3" />'
+        f'stroke="{SYMBOL_BODY_STROKE}" stroke-width="0.3" />'
     )
 
 
@@ -260,22 +249,22 @@ def render_symbol_svg(symbol: KiSymbol) -> str:
         height = abs(rectangle.pos_y1 - rectangle.pos_y0)
         elements.append(
             f'<rect x="{x:.2f}" y="{y:.2f}" width="{width:.2f}" height="{height:.2f}" '
-            'fill="rgba(15, 23, 42, 0.06)" stroke="currentColor" stroke-width="0.3" />'
+            f'fill="{SYMBOL_BODY_FILL}" fill-opacity="0.42" stroke="{SYMBOL_BODY_STROKE}" stroke-width="0.3" />'
         )
 
     for circle in symbol.circles:
         elements.append(
             f'<circle cx="{circle.pos_x:.2f}" cy="{_screen_y(circle.pos_y):.2f}" '
-            f'r="{circle.radius:.2f}" fill="{"rgba(15, 23, 42, 0.06)" if circle.background_filling else "none"}" '
-            'stroke="currentColor" stroke-width="0.3" />'
+            f'r="{circle.radius:.2f}" fill="{SYMBOL_BODY_FILL if circle.background_filling else "none"}" '
+            f'stroke="{SYMBOL_BODY_STROKE}" stroke-width="0.3" />'
         )
 
     for polygon in symbol.polygons:
         points = " ".join(f"{point[0]:.2f},{_screen_y(point[1]):.2f}" for point in polygon.points)
         tag = "polygon" if polygon.is_closed else "polyline"
-        fill = 'fill="rgba(15, 23, 42, 0.06)"' if polygon.is_closed else 'fill="none"'
+        fill = f'fill="{SYMBOL_BODY_FILL}" fill-opacity="0.42"' if polygon.is_closed else 'fill="none"'
         elements.append(
-            f'<{tag} points="{points}" {fill} stroke="currentColor" stroke-width="0.3" />'
+            f'<{tag} points="{points}" {fill} stroke="{SYMBOL_BODY_STROKE}" stroke-width="0.3" />'
         )
 
     for bezier in symbol.beziers:
@@ -286,22 +275,21 @@ def render_symbol_svg(symbol: KiSymbol) -> str:
             f'<path d="M {arc.start_x:.2f} {_screen_y(arc.start_y):.2f} '
             f'Q {arc.middle_x:.2f} {_screen_y(arc.middle_y):.2f} '
             f'{arc.end_x:.2f} {_screen_y(arc.end_y):.2f}" '
-            'fill="none" stroke="currentColor" stroke-width="0.3" />'
+            f'fill="none" stroke="{SYMBOL_BODY_STROKE}" stroke-width="0.3" />'
         )
 
     for pin in symbol.pins:
-        end_x, end_y = _pin_end(pin)
-        label_layout = _pin_label_layout(pin, end_x, end_y)
+        body_x, body_y = _pin_body_end(pin)
+        label_layout = _pin_label_layout(pin, body_x, body_y)
         elements.append(
             f'<line x1="{pin.pos_x:.2f}" y1="{_screen_y(pin.pos_y):.2f}" '
-            f'x2="{end_x:.2f}" y2="{_screen_y(end_y):.2f}" '
-            'stroke="#0f172a" stroke-width="0.4" />'
+            f'x2="{body_x:.2f}" y2="{_screen_y(body_y):.2f}" '
+            f'stroke="{SYMBOL_PIN_STROKE}" stroke-width="0.4" />'
         )
-        transform_attr = f' transform="{label_layout.transform}"' if label_layout.transform else ""
         elements.append(
             f'<text x="{label_layout.x:.2f}" y="{label_layout.y:.2f}" '
-            f'font-size="{label_layout.font_size:.1f}" fill="#334155" '
-            f'text-anchor="{label_layout.anchor}" dominant-baseline="middle"{transform_attr}>'
+            f'font-size="{label_layout.font_size:.1f}" fill="{SYMBOL_PIN_LABEL}" '
+            f'text-anchor="{label_layout.anchor}" dominant-baseline="middle">'
             f"{html.escape(label_layout.text)}"
             "</text>"
         )
@@ -316,11 +304,12 @@ def render_symbol_svg(symbol: KiSymbol) -> str:
         'xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">'
         '<defs>'
         f'<pattern id="{pattern_id}" width="4" height="4" patternUnits="userSpaceOnUse">'
-        '<path d="M 4 0 L 0 0 0 4" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="0.12" />'
+        f'<path d="M 4 0 L 0 0 0 4" fill="none" stroke="{SYMBOL_GRID}" stroke-width="0.12" />'
         "</pattern>"
         "</defs>"
+        + f'<rect x="{-view_width / 2:.2f}" y="{-view_height / 2:.2f}" width="{view_width:.2f}" height="{view_height:.2f}" fill="{SYMBOL_BACKGROUND}" rx="8" />'
         + _background_rect(view_width, view_height, pattern_id)
-        + '<g style="color:#0f172a" transform="translate({:.2f} {:.2f})">'.format(
+        + '<g transform="translate({:.2f} {:.2f})">'.format(
             -center_x,
             -center_y,
         )
