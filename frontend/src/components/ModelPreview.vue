@@ -29,6 +29,7 @@ let controls: OrbitControls | null = null
 let currentModel: Object3D | null = null
 let resizeObserver: ResizeObserver | null = null
 let frameId = 0
+let loadRequestId = 0
 
 const animate = () => {
   if (!renderer || !scene || !camera) {
@@ -85,6 +86,7 @@ const clearModel = () => {
 }
 
 const loadModel = async () => {
+  const requestId = ++loadRequestId
   if (!scene || !props.available || !props.wrlUrl) {
     clearModel()
     statusMessage.value = '3D model is not available for this part.'
@@ -97,6 +99,17 @@ const loadModel = async () => {
   loader.load(
     props.wrlUrl,
     (object) => {
+      if (requestId !== loadRequestId) {
+        object.traverse((child: any) => {
+          child.geometry?.dispose?.()
+          if (Array.isArray(child.material)) {
+            child.material.forEach((material: any) => material.dispose?.())
+          } else {
+            child.material?.dispose?.()
+          }
+        })
+        return
+      }
       object.rotation.x = -Math.PI / 2
       scene?.add(object)
       currentModel = object
@@ -105,6 +118,9 @@ const loadModel = async () => {
     },
     undefined,
     () => {
+      if (requestId !== loadRequestId) {
+        return
+      }
       clearModel()
       statusMessage.value = '3D preview could not be loaded.'
     },
@@ -155,20 +171,14 @@ onMounted(() => {
 })
 
 watch(
-  () => props.wrlUrl,
-  () => {
-    void loadModel()
-  },
-)
-
-watch(
-  () => props.available,
+  () => [props.available, props.wrlUrl] as const,
   () => {
     void loadModel()
   },
 )
 
 onBeforeUnmount(() => {
+  loadRequestId += 1
   window.cancelAnimationFrame(frameId)
   clearModel()
   resizeObserver?.disconnect()
