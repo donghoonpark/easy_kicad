@@ -11,14 +11,18 @@ permissions:
 
 jobs:
   desktop-release:
+    name: Release bundle (${{ matrix.target }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
+        include:
+          - os: ubuntu-24.04
+            target: linux-x64
+          - os: windows-2025
+            target: windows-x64
+          - os: macos-15
+            target: macos-arm64
 
     steps:
       - name: Check out repository
@@ -64,7 +68,7 @@ jobs:
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: easy_kicad-${{ runner.os }}
+          name: easy_kicad-${{ matrix.target }}
           path: release/*
           if-no-files-found: error
 

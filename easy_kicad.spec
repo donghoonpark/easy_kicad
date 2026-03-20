@@ -1,10 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import platform
+
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 datas = collect_data_files("easy_kicad", includes=["web/**/*"])
 hiddenimports = collect_submodules("webview.platforms")
-excludes = ["PyQt5", "PyQt6", "PySide2", "PySide6", "tkinter"]
+excludes = ["PyQt5", "PySide2", "PySide6", "tkinter"]
+
+if platform.system() != "Linux":
+    excludes.append("PyQt6")
 
 
 a = Analysis(

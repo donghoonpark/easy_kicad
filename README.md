@@ -19,7 +19,7 @@ with a Python desktop backend and a Vue 3 + Naive UI frontend.
 - Import into a KiCad symbol library, footprint library, and 3D model folder
 - Settings for library path, proxy, CA bundle, SSL ignore, overwrite mode, and symbol format
 - `pytest` coverage for API, import flow, preview rendering, settings storage, and release packaging
-- GitHub Actions CI that runs tests, builds the frontend, and produces a PyInstaller desktop bundle
+- GitHub Actions CI that validates the app and produces Linux, Windows, and macOS PyInstaller bundles
 
 ## Stack
 
@@ -86,8 +86,8 @@ script wraps that bundle into a platform-specific archive in `release/`.
 
 This repository includes:
 
-- `.github/workflows/ci.yml` for push and pull request validation
-- `.github/workflows/release.yml` for tag-based desktop release artifacts
+- `.github/workflows/ci.yml` for push and pull request validation plus cross-platform desktop bundle artifacts
+- `.github/workflows/release.yml` for tag-based Linux, Windows, and macOS release archives
 - `.github/ISSUE_TEMPLATE/` for bug reports and feature requests
 - `.github/pull_request_template.md` for a consistent review checklist
 
@@ -97,6 +97,12 @@ Recommended release flow:
 2. Tag a version like `v0.1.0`.
 3. Push the tag to GitHub.
 4. GitHub Actions will build desktop archives for each target OS and attach them to the release.
+
+Current packaged targets:
+
+- `ubuntu-24.04` -> `easy_kicad-<version>-linux-x64.tar.gz`
+- `windows-2025` -> `easy_kicad-<version>-windows-x64.zip`
+- `macos-15` -> `easy_kicad-<version>-macos-arm64.tar.gz`
 
 ## Branding Surfaces
 
@@ -125,6 +131,7 @@ tests/                   pytest-based unit and API tests
 - STEP files are still exported during import when available.
 - Preview rendering is optimized for quick inspection rather than pixel-perfect KiCad parity.
 - On this machine, `urllib3` can emit a LibreSSL warning under Python 3.9. The app and tests still run.
+- Linux packaging now pulls in the Qt renderer for `pywebview` so GitHub Actions can produce a desktop bundle without relying on a system GTK Python binding.
 
 ## License
 

@@ -2,8 +2,10 @@ version = 1
 revision = 3
 requires-python = ">=3.9"
 resolution-markers = [
-    "python_full_version >= '3.10'",
-    "python_full_version < '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 
 [[package]]
@@ -70,8 +72,8 @@ name = "cffi"
 version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "pycparser", version = "2.23", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and implementation_name != 'PyPy'" },
-    { name = "pycparser", version = "3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and implementation_name != 'PyPy'" },
+    { name = "pycparser", version = "2.23", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and implementation_name != 'PyPy' and sys_platform != 'linux'" },
+    { name = "pycparser", version = "3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and implementation_name != 'PyPy' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/eb/56/b1ba7935a17738ae8453301356628e8147c79dbb825bcbc73dc7401f9846/cffi-2.0.0.tar.gz", hash = "sha256:44d1b5909021139fe36001ae048dbdde8214afa20200eda0f64c068cac5d5529", size = 523588, upload-time = "2025-09-08T23:24:04.541Z" }
 wheels = [
@@ -222,7 +224,8 @@ name = "click"
 version = "8.1.8"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "colorama", marker = "python_full_version < '3.10' and sys_platform == 'win32'" },
@@ -237,7 +240,8 @@ name = "click"
 version = "8.3.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "colorama", marker = "python_full_version >= '3.10' and sys_platform == 'win32'" },
@@ -252,7 +256,7 @@ name = "clr-loader"
 version = "0.2.10"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cffi" },
+    { name = "cffi", marker = "sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/18/24/c12faf3f61614b3131b5c98d3bf0d376b49c7feaa73edca559aeb2aee080/clr_loader-0.2.10.tar.gz", hash = "sha256:81f114afbc5005bafc5efe5af1341d400e22137e275b042a8979f3feb9fc9446", size = 83605, upload-time = "2026-01-03T23:13:06.984Z" }
 wheels = [
@@ -280,6 +284,7 @@ dependencies = [
     { name = "platformdirs", version = "4.9.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "pydantic" },
     { name = "pywebview" },
+    { name = "pywebview", extra = ["qt"], marker = "sys_platform == 'linux'" },
     { name = "requests" },
     { name = "uvicorn", version = "0.39.0", source = { registry = "https://pypi.org/simple" }, extra = ["standard"], marker = "python_full_version < '3.10'" },
     { name = "uvicorn", version = "0.42.0", source = { registry = "https://pypi.org/simple" }, extra = ["standard"], marker = "python_full_version >= '3.10'" },
@@ -299,7 +304,8 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.128.8" },
     { name = "platformdirs", specifier = ">=4.4.0" },
     { name = "pydantic", specifier = ">=2.12.5" },
-    { name = "pywebview", specifier = ">=6.1" },
+    { name = "pywebview", marker = "sys_platform != 'linux'", specifier = ">=6.1" },
+    { name = "pywebview", extras = ["qt"], marker = "sys_platform == 'linux'", specifier = ">=6.1" },
     { name = "requests", specifier = ">=2.32.5" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.39.0" },
 ]
@@ -341,7 +347,8 @@ name = "fastapi"
 version = "0.128.8"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "annotated-doc", marker = "python_full_version < '3.10'" },
@@ -360,7 +367,8 @@ name = "fastapi"
 version = "0.135.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "annotated-doc", marker = "python_full_version >= '3.10'" },
@@ -487,7 +495,8 @@ name = "iniconfig"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f2/97/ebf4da567aa6827c909642694d71c9fcf53e5b504f2d96afea02718862f3/iniconfig-2.1.0.tar.gz", hash = "sha256:3abbd2e30b36733fee78f9c7f7308f2d0050e88f0087fd25c2645f63c773e1c7", size = 4793, upload-time = "2025-03-19T20:09:59.721Z" }
 wheels = [
@@ -499,7 +508,8 @@ name = "iniconfig"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/72/34/14ca021ce8e5dfedc35312d08ba8bf51fdd999c576889fc2c24cb97f4f10/iniconfig-2.3.0.tar.gz", hash = "sha256:c76315c77db068650d49c5b56314774a7804df16fee4402c1f19d6d15d8c4730", size = 20503, upload-time = "2025-10-18T21:55:43.219Z" }
 wheels = [
@@ -511,7 +521,7 @@ name = "macholib"
 version = "1.16.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "altgraph" },
+    { name = "altgraph", marker = "sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/10/2f/97589876ea967487978071c9042518d28b958d87b17dceb7cdc1d881f963/macholib-1.16.4.tar.gz", hash = "sha256:f408c93ab2e995cd2c46e34fe328b130404be143469e41bc366c807448979362", size = 59427, upload-time = "2025-11-22T08:28:38.373Z" }
 wheels = [
@@ -541,7 +551,8 @@ name = "platformdirs"
 version = "4.4.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/23/e8/21db9c9987b0e728855bd57bff6984f67952bea55d6f75e055c46b5383e8/platformdirs-4.4.0.tar.gz", hash = "sha256:ca753cf4d81dc309bc67b0ea38fd15dc97bc30ce419a7f58d13eb3bf14c4febf", size = 21634, upload-time = "2025-08-26T14:32:04.268Z" }
 wheels = [
@@ -553,7 +564,8 @@ name = "platformdirs"
 version = "4.9.4"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/19/56/8d4c30c8a1d07013911a8fdbd8f89440ef9f08d07a1b50ab8ca8be5a20f9/platformdirs-4.9.4.tar.gz", hash = "sha256:1ec356301b7dc906d83f371c8f487070e99d3ccf9e501686456394622a01a934", size = 28737, upload-time = "2026-03-05T18:34:13.271Z" }
 wheels = [
@@ -580,7 +592,7 @@ name = "pycparser"
 version = "2.23"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/fe/cf/d2d3b9f5699fb1e4615c8e32ff220203e43b248e1dfcc6736ad9057731ca/pycparser-2.23.tar.gz", hash = "sha256:78816d4f24add8f10a06d6f05b4d424ad9e96cfebf68a4ddc99c65c0720d00c2", size = 173734, upload-time = "2025-09-09T13:23:47.91Z" }
 wheels = [
@@ -592,7 +604,7 @@ name = "pycparser"
 version = "3.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz", hash = "sha256:600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29", size = 103492, upload-time = "2026-01-21T14:26:51.89Z" }
 wheels = [
@@ -802,7 +814,7 @@ name = "pyobjc-core"
 version = "11.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/e8/e9/0b85c81e2b441267bca707b5d89f56c2f02578ef8f3eafddf0e0c0b8848c/pyobjc_core-11.1.tar.gz", hash = "sha256:b63d4d90c5df7e762f34739b39cc55bc63dbcf9fb2fb3f2671e528488c7a87fe", size = 974602, upload-time = "2025-06-14T20:56:34.189Z" }
 wheels = [
@@ -821,7 +833,7 @@ name = "pyobjc-core"
 version = "12.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b8/b6/d5612eb40be4fd5ef88c259339e6313f46ba67577a95d86c3470b951fce0/pyobjc_core-12.1.tar.gz", hash = "sha256:2bb3903f5387f72422145e1466b3ac3f7f0ef2e9960afa9bcd8961c5cbf8bd21", size = 1000532, upload-time = "2025-11-14T10:08:28.292Z" }
 wheels = [
@@ -839,10 +851,10 @@ name = "pyobjc-framework-cocoa"
 version = "11.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/4b/c5/7a866d24bc026f79239b74d05e2cf3088b03263da66d53d1b4cf5207f5ae/pyobjc_framework_cocoa-11.1.tar.gz", hash = "sha256:87df76b9b73e7ca699a828ff112564b59251bb9bbe72e610e670a4dc9940d038", size = 5565335, upload-time = "2025-06-14T20:56:59.683Z" }
 wheels = [
@@ -861,10 +873,10 @@ name = "pyobjc-framework-cocoa"
 version = "12.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/02/a3/16ca9a15e77c061a9250afbae2eae26f2e1579eb8ca9462ae2d2c71e1169/pyobjc_framework_cocoa-12.1.tar.gz", hash = "sha256:5556c87db95711b985d5efdaaf01c917ddd41d148b1e52a0c66b1a2e2c5c1640", size = 2772191, upload-time = "2025-11-14T10:13:02.069Z" }
 wheels = [
@@ -882,11 +894,11 @@ name = "pyobjc-framework-quartz"
 version = "11.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c7/ac/6308fec6c9ffeda9942fef72724f4094c6df4933560f512e63eac37ebd30/pyobjc_framework_quartz-11.1.tar.gz", hash = "sha256:a57f35ccfc22ad48c87c5932818e583777ff7276605fef6afad0ac0741169f75", size = 3953275, upload-time = "2025-06-14T20:58:17.924Z" }
 wheels = [
@@ -905,11 +917,11 @@ name = "pyobjc-framework-quartz"
 version = "12.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/94/18/cc59f3d4355c9456fc945eae7fe8797003c4da99212dd531ad1b0de8a0c6/pyobjc_framework_quartz-12.1.tar.gz", hash = "sha256:27f782f3513ac88ec9b6c82d9767eef95a5cf4175ce88a1e5a65875fee799608", size = 3159099, upload-time = "2025-11-14T10:21:24.31Z" }
 wheels = [
@@ -927,11 +939,11 @@ name = "pyobjc-framework-security"
 version = "11.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/ee/6f/ba50ed2d9c1192c67590a7cfefa44fc5f85c776d1e25beb224dec32081f6/pyobjc_framework_security-11.1.tar.gz", hash = "sha256:dabcee6987c6bae575e2d1ef0fcbe437678c4f49f1c25a4b131a5e960f31a2da", size = 302291, upload-time = "2025-06-14T20:58:28.506Z" }
 wheels = [
@@ -950,11 +962,11 @@ name = "pyobjc-framework-security"
 version = "12.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/80/aa/796e09a3e3d5cee32ebeebb7dcf421b48ea86e28c387924608a05e3f668b/pyobjc_framework_security-12.1.tar.gz", hash = "sha256:7fecb982bd2f7c4354513faf90ba4c53c190b7e88167984c2d0da99741de6da9", size = 168044, upload-time = "2025-11-14T10:22:06.334Z" }
 wheels = [
@@ -972,11 +984,11 @@ name = "pyobjc-framework-uniformtypeidentifiers"
 version = "11.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c5/4f/066ed1c69352ccc29165f45afb302f8c9c2b5c6f33ee3abfa41b873c07e5/pyobjc_framework_uniformtypeidentifiers-11.1.tar.gz", hash = "sha256:86c499bec8953aeb0c95af39b63f2592832384f09f12523405650b5d5f1ed5e9", size = 20599, upload-time = "2025-06-14T20:58:41.945Z" }
 wheels = [
@@ -988,11 +1000,11 @@ name = "pyobjc-framework-uniformtypeidentifiers"
 version = "12.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/65/b8/dd9d2a94509a6c16d965a7b0155e78edf520056313a80f0cd352413f0d0b/pyobjc_framework_uniformtypeidentifiers-12.1.tar.gz", hash = "sha256:64510a6df78336579e9c39b873cfcd03371c4b4be2cec8af75a8a3d07dff607d", size = 17030, upload-time = "2025-11-14T10:23:02.222Z" }
 wheels = [
@@ -1004,11 +1016,11 @@ name = "pyobjc-framework-webkit"
 version = "11.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pyobjc-core", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/92/04/fb3d0b68994f7e657ef00c1ac5fc1c04ae2fc7ea581d647f5ae1f6739b14/pyobjc_framework_webkit-11.1.tar.gz", hash = "sha256:27e701c7aaf4f24fc7e601a128e2ef14f2773f4ab071b9db7438dc5afb5053ae", size = 717102, upload-time = "2025-06-14T20:58:47.461Z" }
 wheels = [
@@ -1027,11 +1039,11 @@ name = "pyobjc-framework-webkit"
 version = "12.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "pyobjc-core", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
+    { name = "pyobjc-framework-cocoa", version = "12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/14/10/110a50e8e6670765d25190ca7f7bfeecc47ec4a8c018cb928f4f82c56e04/pyobjc_framework_webkit-12.1.tar.gz", hash = "sha256:97a54dd05ab5266bd4f614e41add517ae62cdd5a30328eabb06792474b37d82a", size = 284531, upload-time = "2025-11-14T10:23:40.287Z" }
 wheels = [
@@ -1045,11 +1057,106 @@ wheels = [
 ]
 
 [[package]]
+name = "pyqt6"
+version = "6.10.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyqt6-qt6", marker = "sys_platform == 'linux'" },
+    { name = "pyqt6-sip", version = "13.10.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform == 'linux'" },
+    { name = "pyqt6-sip", version = "13.11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/96/03/e756f52e8b0d7bb5527baf8c46d59af0746391943bdb8655acba22ee4168/pyqt6-6.10.2.tar.gz", hash = "sha256:6c0db5d8cbb9a3e7e2b5b51d0ff3f283121fa27b864db6d2f35b663c9be5cc83", size = 1085573, upload-time = "2026-01-08T16:40:00.244Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/3e/9a015651ec71cea2e2f960c37edeb21623ba96a74956c0827def837f7c6b/pyqt6-6.10.2-cp39-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:78e1b3d5763e4cbc84485aef600e0aba5e1932fd263b716f92cd1a40dfa5e924", size = 37899440, upload-time = "2026-01-08T16:39:09.027Z" },
+    { url = "https://files.pythonhosted.org/packages/51/74/a88fec2b99700270ca5d7dc7d650236a4990ed6fc88e055ca0fc8a339ee3/pyqt6-6.10.2-cp39-abi3-manylinux_2_39_aarch64.whl", hash = "sha256:bbc3af541bbecd27301bfe69fe445aa1611a9b490bd3de77306b12df632f7ec6", size = 40748467, upload-time = "2026-01-08T16:39:29.551Z" },
+]
+
+[[package]]
+name = "pyqt6-qt6"
+version = "6.10.2"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d5/fe/01fd9b9d2ca139ef61582f2e2da249fa169229144294c1bb27db59ad8420/pyqt6_qt6-6.10.2-py3-none-manylinux_2_34_x86_64.whl", hash = "sha256:19c10b5f0806e9f9bac2c9759bd5d7d19a78967f330fd60a2db409177fa76e49", size = 84028760, upload-time = "2026-01-29T12:28:03.267Z" },
+    { url = "https://files.pythonhosted.org/packages/f4/20/a0d027ebb267d3afaf319d94efe1ff4d667004ee83b96701329a4d11fb95/pyqt6_qt6-6.10.2-py3-none-manylinux_2_39_aarch64.whl", hash = "sha256:2e60d616861ca4565cd295418d605975aa2dc407ba4b94c1586a70c92e9cb052", size = 83063975, upload-time = "2026-01-29T12:28:48.928Z" },
+]
+
+[[package]]
+name = "pyqt6-sip"
+version = "13.10.2"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.10' and sys_platform == 'linux'",
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2f/4a/96daf6c2e4f689faae9bd8cebb52754e76522c58a6af9b5ec86a2e8ec8b4/pyqt6_sip-13.10.2.tar.gz", hash = "sha256:464ad156bf526500ce6bd05cac7a82280af6309974d816739b4a9a627156fafe", size = 92548, upload-time = "2025-05-23T12:26:49.901Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/29/79a2dba1cc6ec02c927dd0ffd596ca15ba0a2968123143bc00fc35f0173b/pyqt6_sip-13.10.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:07f77e89d93747dda71b60c3490b00d754451729fbcbcec840e42084bf061655", size = 305804, upload-time = "2025-05-23T12:26:23.297Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/4f/fa8468f055679905d0e38d471ae16b5968896ee1d951477e162d9d0a712d/pyqt6_sip-13.10.2-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:4ffa71ddff6ef031d52cd4f88b8bba08b3516313c023c7e5825cf4a0ba598712", size = 284059, upload-time = "2025-05-23T12:26:24.507Z" },
+    { url = "https://files.pythonhosted.org/packages/d6/00/984a94f14ba378c802a8e304803bb6dc6961cd9f24befa1bf3987731f0c3/pyqt6_sip-13.10.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b1d3cc9015a1bd8c8d3e86a009591e897d4d46b0c514aede7d2970a2208749cd", size = 317301, upload-time = "2025-05-23T12:26:28.182Z" },
+    { url = "https://files.pythonhosted.org/packages/0d/b1/c3b433ebcee2503571d71be025de5dab4489d7153007fd5ae79c543eeedb/pyqt6_sip-13.10.2-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:ddd578a8d975bfb5fef83751829bf09a97a1355fa1de098e4fb4d1b74ee872fc", size = 294277, upload-time = "2025-05-23T12:26:29.406Z" },
+    { url = "https://files.pythonhosted.org/packages/51/11/1fc3bae02a12a3ac8354aa579b56206286e8b5ca9586677b1058c81c2f74/pyqt6_sip-13.10.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4ccf197f8fa410e076936bee28ad9abadb450931d5be5625446fd20e0d8b27a6", size = 322757, upload-time = "2025-05-23T12:26:33.752Z" },
+    { url = "https://files.pythonhosted.org/packages/21/40/de9491213f480a27199690616959a17a0f234962b86aa1dd4ca2584e922d/pyqt6_sip-13.10.2-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:37af463dcce39285e686d49523d376994d8a2508b9acccb7616c4b117c9c4ed7", size = 304251, upload-time = "2025-05-23T12:26:35.66Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/21/84c230048e3bfef4a9209d16e56dcd2ae10590d03a31556ae8b5f1dcc724/pyqt6_sip-13.10.2-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ad376a6078da37b049fdf9d6637d71b52727e65c4496a80b753ddc8d27526aca", size = 322920, upload-time = "2025-05-23T12:26:39.856Z" },
+    { url = "https://files.pythonhosted.org/packages/b0/1e/c6a28a142f14e735088534cc92951c3f48cccd77cdd4f3b10d7996be420f/pyqt6_sip-13.10.2-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:3dde8024d055f496eba7d44061c5a1ba4eb72fc95e5a9d7a0dbc908317e0888b", size = 303833, upload-time = "2025-05-23T12:26:41.075Z" },
+    { url = "https://files.pythonhosted.org/packages/f2/cb/fdef02e0d6ee8443a9683a43650d61c6474b634b6ae6e1c6f097da6310bf/pyqt6_sip-13.10.2-cp314-cp314-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9128d770a611200529468397d710bc972f1dcfe12bfcbb09a3ccddcd4d54fa5b", size = 323488, upload-time = "2025-10-08T08:44:01.965Z" },
+    { url = "https://files.pythonhosted.org/packages/8c/5b/8ede8d6234c3ea884cbd097d7d47ff9910fb114efe041af62b4453acd23b/pyqt6_sip-13.10.2-cp314-cp314-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:d820a0fae7315932c08f27dc0a7e33e0f50fe351001601a8eb9cf6f22b04562e", size = 303881, upload-time = "2025-10-08T08:44:04.086Z" },
+    { url = "https://files.pythonhosted.org/packages/f0/42/6f7c2006871b20cf3e5073e3ffaa0bede0f8e2f8ccc2105c02e8d523c7d7/pyqt6_sip-13.10.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5506b9a795098df3b023cc7d0a37f93d3224a9c040c43804d4bc06e0b2b742b0", size = 303064, upload-time = "2025-05-23T12:26:46.19Z" },
+    { url = "https://files.pythonhosted.org/packages/00/1c/38068f79d583fc9c2992553445634171e8b0bee6682be22cb8d4d18e7da6/pyqt6_sip-13.10.2-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:e455a181d45a28ee8d18d42243d4f470d269e6ccdee60f2546e6e71218e05bb4", size = 281774, upload-time = "2025-05-23T12:26:47.413Z" },
+]
+
+[[package]]
+name = "pyqt6-sip"
+version = "13.11.1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
+]
+sdist = { url = "https://files.pythonhosted.org/packages/90/24/a753e1af94b9ae5b2da63d4598457308da3cdbf0838c959381db086ccc86/pyqt6_sip-13.11.1.tar.gz", hash = "sha256:869c5b48afe38e55b1ee0dd72182b0886e968cc509b98023ff50010b013ce1be", size = 92574, upload-time = "2026-03-09T13:01:35.418Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/48/ed/1dbe26f5757ad19601b260cebba0b40c0d868639e3253b26f80e8a1cd9f8/pyqt6_sip-13.11.1-cp310-cp310-manylinux1_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:7a1b08421967e68a821d3ea97fcdc8413671aec817a0dc46b844ab4bb2ebab66", size = 280567, upload-time = "2026-03-09T13:01:04.616Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/30/cded90fa556be3f6836c44bab5dd06b47664a20ffb47e7fdfa9538d7c5db/pyqt6_sip-13.11.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:dd8be768799be1a29857ea0125b1d365021a8a014c1d746f0df6b7ba0400edef", size = 304088, upload-time = "2026-03-09T13:01:02.89Z" },
+    { url = "https://files.pythonhosted.org/packages/d5/0d/6ee861c53f3f7e6c5dd34a441d17aad1dfb3d50ce1f1a024cc9194ac3db3/pyqt6_sip-13.11.1-cp311-cp311-manylinux1_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:6aa6c15ad3a9bb86e69119baff77b4ac17c47e55ee567abff616a4652051a6cc", size = 289930, upload-time = "2026-03-09T13:01:11.122Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/39/c975733d7204a594e6ae51d3a810aad539d09718aa3ceeb0dd28cb3276bd/pyqt6_sip-13.11.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0ee652b272373c4f9287625ef32ad4ec1f0755c24928dc958a870b7a928b288c", size = 315827, upload-time = "2026-03-09T13:01:09.48Z" },
+    { url = "https://files.pythonhosted.org/packages/95/cb/116f9b328636765f3bce97d9e10ec041c54bbe92beb0617edb86c2b615c1/pyqt6_sip-13.11.1-cp312-cp312-manylinux1_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:0df15849946cea969d3ff2b24b76149262b6044aea2c5403e4f70c24c973a4c8", size = 299564, upload-time = "2026-03-09T13:01:17.292Z" },
+    { url = "https://files.pythonhosted.org/packages/1b/be/fe2321285e8f683e705d199dbb458131f1850dc5966155a19c40100c85bb/pyqt6_sip-13.11.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c52b2b27fc77d9447a8dc1c6de1aaccc22d41e48697aafb2f2f20b8984bb02a5", size = 321210, upload-time = "2026-03-09T13:01:15.904Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/e3/65b605759859d38231ce7544065d4c61f891eb7766c351318e2a0b08a473/pyqt6_sip-13.11.1-cp313-cp313-manylinux1_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:a72f4ebdab16a8a484019ff593de90d8013d3286b678c6ba1c0bdb117f4fcb13", size = 299932, upload-time = "2026-03-09T13:01:24.912Z" },
+    { url = "https://files.pythonhosted.org/packages/60/f7/c10d2dd5bf503a1de83bd163467bd323f12af016866c2814743b5b1efe1c/pyqt6_sip-13.11.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b68e442efc4275651bf63f2c43713e242924fd948909e31cf8f20d783ca505e9", size = 321497, upload-time = "2026-03-09T13:01:22.724Z" },
+    { url = "https://files.pythonhosted.org/packages/03/72/5a3d9ffef0caa7e1bc7a35d6300f6099bfccd1d8a485b4320ba20013a2d9/pyqt6_sip-13.11.1-cp314-cp314-manylinux1_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:353d613129316e9f7eda6bbe821deb7b7ffa14483499189171fd8a246873f9ac", size = 299560, upload-time = "2026-03-09T13:01:32.134Z" },
+    { url = "https://files.pythonhosted.org/packages/98/f4/886f901f1e04da717a11e180ba19a9c7fc62da170966d57206006f173bda/pyqt6_sip-13.11.1-cp314-cp314-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fcadd68e09ee24cdda8f8bfcba52e59c9b297055d2c450f0eb89afa61a8dc31a", size = 321846, upload-time = "2026-03-09T13:01:29.817Z" },
+]
+
+[[package]]
+name = "pyqt6-webengine"
+version = "6.10.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyqt6", marker = "sys_platform == 'linux'" },
+    { name = "pyqt6-sip", version = "13.10.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10' and sys_platform == 'linux'" },
+    { name = "pyqt6-sip", version = "13.11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10' and sys_platform == 'linux'" },
+    { name = "pyqt6-webengine-qt6", marker = "sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5f/5d/355dfe41246c611e861a1e88b43173b57c1b56a550bea12cfeaafbc7e6b6/pyqt6_webengine-6.10.0.tar.gz", hash = "sha256:267d27275d0c79ae270bca4b03520a41fa7e85c2a4d9632da8cb9cc233a55ad1", size = 37053, upload-time = "2025-10-22T12:08:54.709Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7b/d6/dd16a44378deecaeea747eb85c3cb816ac5bc30ea8622d647588415f57ad/pyqt6_webengine-6.10.0-1-cp39-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:95dc3c0c36c0e4eb4024e4fdbcfa1c5593a88e16de1563431a422084bec26974", size = 1305797, upload-time = "2025-10-24T18:33:34.249Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/43/bfb9b8faa50f6b94d34881303777225b255a081f95df1b177002598ef22b/pyqt6_webengine-6.10.0-cp39-abi3-manylinux_2_34_x86_64.whl", hash = "sha256:9911b7b3995bc1cff8fec142c2817ee0bbdbaea18b94aebaa6bc23e13941d0b2", size = 1336461, upload-time = "2025-10-22T12:08:50.038Z" },
+    { url = "https://files.pythonhosted.org/packages/16/6d/0964bc6674f00f1a8161f3c2d26ce1507b73b5a09361c204002b1a32512d/pyqt6_webengine-6.10.0-cp39-abi3-manylinux_2_39_aarch64.whl", hash = "sha256:cd2c24ab5ee9142fc34b8a21e12255dcf61bdc15aff3eccd00b1cb91a1b1fbf8", size = 1430142, upload-time = "2025-10-22T12:08:51.318Z" },
+]
+
+[[package]]
+name = "pyqt6-webengine-qt6"
+version = "6.10.2"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bf/17/d7e5245e6c4f25747b7792c40bf5e26d6170585ea4412492097897ad9d39/pyqt6_webengine_qt6-6.10.2-py3-none-manylinux_2_34_x86_64.whl", hash = "sha256:546a742677095d9fa047a4a5825bae60e7f55a8da0ab0bba3a565ca729c7ffd1", size = 113910460, upload-time = "2026-01-29T12:21:26.725Z" },
+    { url = "https://files.pythonhosted.org/packages/bf/03/5f40428453f1abcf2326fadb5b51ee537258c7f0ba144a88dfb831fb92a6/pyqt6_webengine_qt6-6.10.2-py3-none-manylinux_2_39_aarch64.whl", hash = "sha256:9beba79de5ac6734017895d252380dd67c0010b6bdd94616c979fb6f102c45dc", size = 109521572, upload-time = "2026-01-29T12:22:19.712Z" },
+]
+
+[[package]]
 name = "pytest"
 version = "8.4.2"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "colorama", marker = "python_full_version < '3.10' and sys_platform == 'win32'" },
@@ -1070,7 +1177,8 @@ name = "pytest"
 version = "9.0.2"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "colorama", marker = "python_full_version >= '3.10' and sys_platform == 'win32'" },
@@ -1091,7 +1199,8 @@ name = "python-dotenv"
 version = "1.2.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f0/26/19cadc79a718c5edbec86fd4919a6b6d3f681039a2f6d66d14be94e75fb9/python_dotenv-1.2.1.tar.gz", hash = "sha256:42667e897e16ab0d66954af0e60a9caa94f0fd4ecf3aaf6d2d260eec1aa36ad6", size = 44221, upload-time = "2025-10-26T15:12:10.434Z" }
 wheels = [
@@ -1103,7 +1212,8 @@ name = "python-dotenv"
 version = "1.2.2"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/82/ed/0301aeeac3e5353ef3d94b6ec08bbcabd04a72018415dcb29e588514bba8/python_dotenv-1.2.2.tar.gz", hash = "sha256:2c371a91fbd7ba082c2c1dc1f8bf89ca22564a087c2c287cd9b662adde799cf3", size = 50135, upload-time = "2026-03-01T16:00:26.196Z" }
 wheels = [
@@ -1115,7 +1225,7 @@ name = "pythonnet"
 version = "3.0.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "clr-loader" },
+    { name = "clr-loader", marker = "sys_platform != 'linux'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/9a/d6/1afd75edd932306ae9bd2c2d961d603dc2b52fcec51b04afea464f1f6646/pythonnet-3.0.5.tar.gz", hash = "sha256:48e43ca463941b3608b32b4e236db92d8d40db4c58a75ace902985f76dac21cf", size = 239212, upload-time = "2024-12-13T08:30:44.393Z" }
 wheels = [
@@ -1148,6 +1258,13 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/64/09/75cf92c4db19350ddb084d841e352ce30e89668815d0494d1dd595c85469/pywebview-6.1.tar.gz", hash = "sha256:f0b95047860caf3d921581f9e16b4edb1a125b23e2ce691c4da2968f8b160ff2", size = 496270, upload-time = "2025-10-21T18:02:44.323Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/74/12/ce9006cdcc1834378826b5c0d4b554d899cd25ac9c665569d060f220b0e1/pywebview-6.1-py3-none-any.whl", hash = "sha256:2b552a340557e76a740b045a25937f72dae751e0985d5f5d9556f697ba622ec5", size = 511255, upload-time = "2025-10-21T18:02:42.377Z" },
+]
+
+[package.optional-dependencies]
+qt = [
+    { name = "pyqt6", marker = "sys_platform == 'linux'" },
+    { name = "pyqt6-webengine", marker = "sys_platform == 'linux'" },
+    { name = "qtpy", marker = "sys_platform == 'linux'" },
 ]
 
 [[package]]
@@ -1273,7 +1390,8 @@ name = "starlette"
 version = "0.49.3"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "anyio", marker = "python_full_version < '3.10'" },
@@ -1289,7 +1407,8 @@ name = "starlette"
 version = "0.52.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "anyio", marker = "python_full_version >= '3.10'" },
@@ -1389,7 +1508,8 @@ name = "uvicorn"
 version = "0.39.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "click", version = "8.1.8", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
@@ -1417,7 +1537,8 @@ name = "uvicorn"
 version = "0.42.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 dependencies = [
     { name = "click", version = "8.3.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
@@ -1614,7 +1735,8 @@ name = "websockets"
 version = "15.0.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.10'",
+    "python_full_version < '3.10' and sys_platform != 'linux'",
+    "python_full_version < '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/21/e6/26d09fab466b7ca9c7737474c52be4f76a40301b08362eb2dbc19dcc16c1/websockets-15.0.1.tar.gz", hash = "sha256:82544de02076bafba038ce055ee6412d68da13ab47f0c60cab827346de828dee", size = 177016, upload-time = "2025-03-05T20:03:41.606Z" }
 wheels = [
@@ -1693,7 +1815,8 @@ name = "websockets"
 version = "16.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.10'",
+    "python_full_version >= '3.10' and sys_platform != 'linux'",
+    "python_full_version >= '3.10' and sys_platform == 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/04/24/4b2031d72e840ce4c1ccb255f693b15c334757fc50023e4db9537080b8c4/websockets-16.0.tar.gz", hash = "sha256:5f6261a5e56e8d5c42a4497b364ea24d94d9563e8fbd44e78ac40879c60179b5", size = 179346, upload-time = "2026-01-10T09:23:47.181Z" }
 wheels = [
