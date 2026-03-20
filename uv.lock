@@ -274,7 +274,7 @@ wheels = [
 
 [[package]]
 name = "easy-kicad"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "easyeda2kicad" },
