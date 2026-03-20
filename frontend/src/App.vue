@@ -24,6 +24,7 @@ import {
 import { appDescription, appName, appTagline } from '@/branding'
 import ModelPreview from '@/components/ModelPreview.vue'
 import PreviewCard from '@/components/PreviewCard.vue'
+import SvgPreview from '@/components/SvgPreview.vue'
 import type {
   AppSettings,
   ConnectionTestResponse,
@@ -268,10 +269,11 @@ onMounted(async () => {
           <n-grid cols="1 s:1 m:3" responsive="screen" x-gap="20" y-gap="20">
             <n-grid-item>
               <preview-card title="Symbol" subtitle="KiCad-ready SVG preview">
-                <div
+                <svg-preview
                   v-if="preview"
-                  class="svg-panel"
-                  v-html="preview.symbolSvg"
+                  kind="symbol"
+                  :svg="preview.symbolSvg"
+                  :initial-scale="1.45"
                 />
                 <div v-else class="empty-state">Search for a part to load its symbol.</div>
               </preview-card>
@@ -279,10 +281,12 @@ onMounted(async () => {
 
             <n-grid-item>
               <preview-card title="Footprint" subtitle="Copper, silkscreen, and drills">
-                <div
+                <svg-preview
                   v-if="preview"
-                  class="svg-panel"
-                  v-html="preview.footprintSvg"
+                  kind="footprint"
+                  :svg="preview.footprintSvg"
+                  :initial-scale="1.05"
+                  :grid-square-mm="1"
                 />
                 <div v-else class="empty-state">Footprint preview will appear here.</div>
               </preview-card>

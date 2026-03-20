@@ -158,7 +158,7 @@ textarea {
 }
 
 .preview-card {
-  min-height: 420px;
+  min-height: 448px;
   padding: 18px;
 }
 
@@ -181,7 +181,7 @@ textarea {
 }
 
 .preview-card__body {
-  min-height: 340px;
+  min-height: 368px;
 }
 
 .svg-panel,
@@ -197,9 +197,80 @@ textarea {
   border: 1px solid rgba(148, 163, 184, 0.22);
 }
 
-.svg-panel :deep(svg) {
+.svg-panel--interactive {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.svg-panel--interactive.is-dragging {
+  cursor: grabbing;
+}
+
+.svg-panel__viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  padding: 14px;
+}
+
+.svg-panel__content {
   width: 100%;
   height: 100%;
+  transform-origin: center center;
+  transition: transform 140ms ease;
+}
+
+.svg-panel--interactive.is-dragging .svg-panel__content {
+  transition: none;
+}
+
+.svg-panel__content svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.svg-panel__toolbar {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+
+.svg-panel__tool {
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.92);
+  color: #0f172a;
+  font-size: 0.98rem;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+}
+
+.svg-panel__tool--label {
+  min-width: 68px;
+  padding: 0 12px;
+  font-size: 0.8rem;
+}
+
+.svg-panel__scale {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.86);
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.24);
 }
 
 .model-preview--empty,
