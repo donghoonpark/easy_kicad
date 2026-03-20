@@ -52,6 +52,7 @@ testpaths = ["tests"]
 [tool.uv.build-backend]
 source-include = [
     "docs/**",
+    "packaging/**",
     "scripts/**",
     "tests/**",
 ]

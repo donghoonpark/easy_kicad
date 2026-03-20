@@ -78,3 +78,11 @@ coll = COLLECT(
     upx_exclude=[],
     name=APP_BUNDLE_NAME,
 )
+
+if platform.system() == "Darwin" and BUILD_VARIANT != "debug":
+    app = BUNDLE(
+        coll,
+        name=f"{APP_BUNDLE_NAME}.app",
+        icon=icon,
+        bundle_identifier="io.easykicad.app",
+    )

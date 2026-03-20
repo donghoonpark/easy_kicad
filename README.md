@@ -19,14 +19,14 @@ with a Python desktop backend and a Vue 3 + Naive UI frontend.
 - Import into a KiCad symbol library, footprint library, and 3D model folder
 - Settings for library path, proxy, CA bundle, SSL ignore, overwrite mode, and symbol format
 - `pytest` coverage for API, import flow, preview rendering, settings storage, and release packaging
-- GitHub Actions CI that validates the app and produces Linux, Windows, and macOS PyInstaller bundles
+- GitHub Actions CI that validates the app, builds release artifacts for Linux/Windows/macOS, and smoke-tests the Windows installer plus macOS DMG
 
 ## Stack
 
 - Backend: Python, FastAPI, `easyeda2kicad`, `pywebview`
 - Frontend: Vue 3, TypeScript, Naive UI, three.js, Vite
 - Python package management: `uv`
-- Desktop packaging: PyInstaller
+- Desktop packaging: PyInstaller, NSIS, unsigned macOS DMG
 
 ## Quick Start
 
@@ -73,7 +73,7 @@ Open [http://127.0.0.1:8765](http://127.0.0.1:8765) if you are using server-only
 UV_CACHE_DIR=.uv-cache uv run pytest
 ```
 
-## Build A Desktop Bundle
+## Build Desktop Artifacts
 
 Build the frontend first, then package the desktop app:
 
@@ -88,6 +88,18 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/build_release.py
 PyInstaller produces an onedir bundle in `dist/easy_kicad/`, and the helper
 script wraps that bundle into a platform-specific archive in `release/`.
 
+Windows installer:
+
+```bash
+UV_CACHE_DIR=.uv-cache uv run python scripts/build_windows_installer.py
+```
+
+macOS DMG:
+
+```bash
+UV_CACHE_DIR=.uv-cache uv run python scripts/build_macos_dmg.py
+```
+
 Windows debug bundle with console logging:
 
 ```bash
@@ -100,24 +112,26 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/build_release.py --dist-dir dist-de
 
 This repository includes:
 
-- `.github/workflows/ci.yml` for push and pull request validation plus cross-platform desktop bundle artifacts
-- `.github/workflows/release.yml` for tag-based Linux, Windows, and macOS release archives
+- `.github/workflows/ci.yml` for push and pull request validation plus cross-platform desktop artifacts
+- `.github/workflows/release.yml` for tag-based Linux, Windows, and macOS release artifacts
 - `.github/ISSUE_TEMPLATE/` for bug reports and feature requests
 - `.github/pull_request_template.md` for a consistent review checklist
 
 Recommended release flow:
 
-1. Push to your default branch and let CI verify tests and packaging.
+1. Push to your default branch and let CI verify tests, installers, and packaging.
 2. Tag a version like `v0.1.0`.
 3. Push the tag to GitHub.
-4. GitHub Actions will build desktop archives for each target OS and attach them to the release.
+4. GitHub Actions will build desktop artifacts for each target OS and attach them to the release.
 
 Current packaged targets:
 
 - `ubuntu-24.04` -> `easy_kicad-<version>-linux-x64.tar.gz`
 - `windows-2025` -> `easy_kicad-<version>-windows-x64.zip`
+- `windows-2025` installer -> `easy_kicad-<version>-windows-x64-setup.exe`
 - `windows-2025` debug -> `easy_kicad-<version>-windows-x64-debug.zip`
 - `macos-15` -> `easy_kicad-<version>-macos-arm64.tar.gz`
+- `macos-15` DMG -> `easy_kicad-<version>-macos-arm64.dmg`
 
 ## Branding Surfaces
 
@@ -149,6 +163,7 @@ tests/                   pytest-based unit and API tests
 - If you previously created `.venv` with macOS system Python 3.9, recreate it with `uv sync --python 3.11 --group dev` to avoid LibreSSL-related `urllib3` warnings.
 - Linux packaging now pulls in the Qt renderer for `pywebview` so GitHub Actions can produce a desktop bundle without relying on a system GTK Python binding.
 - Windows packaging also uses the Qt backend for `pywebview` to avoid the WinForms/pythonnet startup path in frozen builds.
+- The macOS DMG is currently unsigned. It packages the `.app` cleanly for distribution, but end users may still see the standard Gatekeeper warning until Developer ID signing and notarization are added.
 
 ## License
 
