@@ -5,7 +5,7 @@ import {
   Box3,
   Color,
   DirectionalLight,
-  Group,
+  Object3D,
   PerspectiveCamera,
   Scene,
   Vector3,
@@ -20,12 +20,14 @@ const props = defineProps<{
 }>()
 
 const mountEl = ref<HTMLDivElement | null>(null)
+const statusMessage = ref('3D model is not available for this part.')
 
 let renderer: WebGLRenderer | null = null
 let camera: PerspectiveCamera | null = null
 let scene: Scene | null = null
 let controls: OrbitControls | null = null
-let currentModel: Group | null = null
+let currentModel: Object3D | null = null
+let resizeObserver: ResizeObserver | null = null
 let frameId = 0
 
 const animate = () => {
@@ -37,7 +39,19 @@ const animate = () => {
   frameId = window.requestAnimationFrame(animate)
 }
 
-const fitCameraToObject = (object: Group) => {
+const syncViewport = () => {
+  if (!mountEl.value || !renderer || !camera) {
+    return
+  }
+
+  const width = Math.max(mountEl.value.clientWidth, 1)
+  const height = Math.max(mountEl.value.clientHeight, 1)
+  renderer.setSize(width, height)
+  camera.aspect = width / height
+  camera.updateProjectionMatrix()
+}
+
+const fitCameraToObject = (object: Object3D) => {
   if (!camera || !controls) {
     return
   }
@@ -73,11 +87,13 @@ const clearModel = () => {
 const loadModel = async () => {
   if (!scene || !props.available || !props.wrlUrl) {
     clearModel()
+    statusMessage.value = '3D model is not available for this part.'
     return
   }
 
   const loader = new VRMLLoader()
   clearModel()
+  statusMessage.value = 'Loading 3D model...'
   loader.load(
     props.wrlUrl,
     (object) => {
@@ -85,10 +101,12 @@ const loadModel = async () => {
       scene?.add(object)
       currentModel = object
       fitCameraToObject(object)
+      statusMessage.value = ''
     },
     undefined,
     () => {
       clearModel()
+      statusMessage.value = '3D preview could not be loaded.'
     },
   )
 }
@@ -111,7 +129,7 @@ onMounted(() => {
 
   renderer = new WebGLRenderer({ antialias: true, alpha: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  renderer.setSize(mountEl.value.clientWidth, mountEl.value.clientHeight)
+  syncViewport()
   mountEl.value.appendChild(renderer.domElement)
 
   controls = new OrbitControls(camera, renderer.domElement)
@@ -123,6 +141,14 @@ onMounted(() => {
 
   scene.add(ambient)
   scene.add(key)
+
+  resizeObserver = new ResizeObserver(() => {
+    syncViewport()
+    if (currentModel) {
+      fitCameraToObject(currentModel)
+    }
+  })
+  resizeObserver.observe(mountEl.value)
 
   animate()
   void loadModel()
@@ -145,14 +171,16 @@ watch(
 onBeforeUnmount(() => {
   window.cancelAnimationFrame(frameId)
   clearModel()
+  resizeObserver?.disconnect()
   controls?.dispose()
   renderer?.dispose()
 })
 </script>
 
 <template>
-  <div v-if="available" ref="mountEl" class="model-preview" />
-  <div v-else class="model-preview model-preview--empty">
-    3D model is not available for this part.
+  <div ref="mountEl" class="model-preview">
+    <div v-if="statusMessage" class="model-preview__status">
+      {{ statusMessage }}
+    </div>
   </div>
 </template>

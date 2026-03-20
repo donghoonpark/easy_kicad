@@ -24,6 +24,44 @@ def _svg_bounds(points: Iterable[tuple[float, float]], padding: float = 4.0) -> 
     return f"{min_x:.2f} {min_y:.2f} {width:.2f} {height:.2f}"
 
 
+def _normalized_viewport(
+    points: Iterable[tuple[float, float]],
+    padding: float,
+) -> tuple[str, float, float, float, float]:
+    point_list = list(points) or [(0.0, 0.0), (10.0, 10.0)]
+    x_values = [point[0] for point in point_list]
+    y_values = [point[1] for point in point_list]
+    min_x = min(x_values)
+    max_x = max(x_values)
+    min_y = min(y_values)
+    max_y = max(y_values)
+
+    width = max(max_x - min_x, 10.0)
+    height = max(max_y - min_y, 10.0)
+    center_x = (min_x + max_x) / 2
+    center_y = (min_y + max_y) / 2
+
+    view_min_x = -(width / 2) - padding
+    view_min_y = -(height / 2) - padding
+    view_width = width + (padding * 2)
+    view_height = height + (padding * 2)
+    view_box = f"{view_min_x:.2f} {view_min_y:.2f} {view_width:.2f} {view_height:.2f}"
+    return view_box, center_x, center_y, view_width, view_height
+
+
+def _background_rect(
+    view_width: float,
+    view_height: float,
+    pattern_id: str,
+) -> str:
+    x = -(view_width / 2)
+    y = -(view_height / 2)
+    return (
+        f'<rect x="{x:.2f}" y="{y:.2f}" width="{view_width:.2f}" height="{view_height:.2f}" '
+        f'fill="url(#{pattern_id})" rx="8" />'
+    )
+
+
 def _screen_y(value: float) -> float:
     return -value
 
@@ -103,6 +141,9 @@ def _render_bezier(bezier: KiSymbolBezier) -> str:
 def render_symbol_svg(symbol: KiSymbol) -> str:
     elements: list[str] = []
     bounds = _symbol_bounds(symbol)
+    pattern_id = (
+        f"symbol-grid-{re.sub(r'[^a-zA-Z0-9]+', '-', symbol.info.name).strip('-').lower() or 'part'}"
+    )
 
     for rectangle in symbol.rectangles:
         x = min(rectangle.pos_x0, rectangle.pos_x1)
@@ -147,25 +188,41 @@ def render_symbol_svg(symbol: KiSymbol) -> str:
             f'x2="{end_x:.2f}" y2="{_screen_y(end_y):.2f}" '
             'stroke="#0f172a" stroke-width="0.4" />'
         )
-        label_x = end_x + 1.8
+        if pin.orientation == 180:
+            label_x = end_x - 1.8
+            anchor = "end"
+        elif pin.orientation in (90, 270):
+            label_x = end_x
+            anchor = "middle"
+        else:
+            label_x = end_x + 1.8
+            anchor = "start"
         label_y = _screen_y(end_y) - 0.8
         elements.append(
             f'<text x="{label_x:.2f}" y="{label_y:.2f}" '
-            'font-size="2.1" fill="#334155">'
+            f'font-size="2.1" fill="#334155" text-anchor="{anchor}">'
             f"{html.escape(pin.name or pin.number)}"
             "</text>"
         )
 
+    view_box, center_x, center_y, view_width, view_height = _normalized_viewport(
+        bounds,
+        padding=5.0,
+    )
+
     return (
-        f'<svg viewBox="{_svg_bounds(bounds)}" class="preview-svg" '
+        f'<svg viewBox="{view_box}" class="preview-svg" '
         'xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">'
-        '<rect width="100%" height="100%" fill="url(#symbol-grid)" rx="8" />'
         '<defs>'
-        '<pattern id="symbol-grid" width="4" height="4" patternUnits="userSpaceOnUse">'
+        f'<pattern id="{pattern_id}" width="4" height="4" patternUnits="userSpaceOnUse">'
         '<path d="M 4 0 L 0 0 0 4" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="0.12" />'
         "</pattern>"
         "</defs>"
-        '<g style="color:#0f172a">'
+        + _background_rect(view_width, view_height, pattern_id)
+        + '<g style="color:#0f172a" transform="translate({:.2f} {:.2f})">'.format(
+            -center_x,
+            -center_y,
+        )
         + "".join(elements)
         + "</g></svg>"
     )
@@ -200,6 +257,9 @@ def _parse_custom_polygon(
 def render_footprint_svg(footprint: KiFootprint) -> str:
     elements: list[str] = []
     bounds: list[tuple[float, float]] = []
+    pattern_id = (
+        f"footprint-grid-{re.sub(r'[^a-zA-Z0-9]+', '-', footprint.info.name).strip('-').lower() or 'part'}"
+    )
 
     for track in footprint.tracks + footprint.rectangles:
         for start_x, start_y, end_x, end_y in zip(
@@ -304,15 +364,21 @@ def render_footprint_svg(footprint: KiFootprint) -> str:
             "</text>"
         )
 
+    view_box, center_x, center_y, view_width, view_height = _normalized_viewport(
+        bounds,
+        padding=3.5,
+    )
+
     return (
-        f'<svg viewBox="{_svg_bounds(bounds)}" class="preview-svg" '
+        f'<svg viewBox="{view_box}" class="preview-svg" '
         'xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">'
-        '<rect width="100%" height="100%" fill="url(#footprint-grid)" rx="8" />'
         '<defs>'
-        '<pattern id="footprint-grid" width="1" height="1" patternUnits="userSpaceOnUse">'
+        f'<pattern id="{pattern_id}" width="1" height="1" patternUnits="userSpaceOnUse">'
         '<path d="M 1 0 L 0 0 0 1" fill="none" stroke="rgba(148,163,184,0.12)" stroke-width="0.04" />'
         "</pattern>"
         "</defs>"
+        + _background_rect(view_width, view_height, pattern_id)
+        + '<g transform="translate({:.2f} {:.2f})">'.format(-center_x, -center_y)
         + "".join(elements)
-        + "</svg>"
+        + "</g></svg>"
     )
