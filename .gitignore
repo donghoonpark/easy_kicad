@@ -1,0 +1,8 @@
+.venv/
+.uv-cache/
+.pytest_cache/
+.tmp-live/
+frontend/node_modules/
+frontend/.vite/
+__pycache__/
+*.pyc
