@@ -9,6 +9,7 @@ from typing import List, Optional
 import uvicorn
 
 from easy_kicad.app import create_app
+from easy_kicad.metadata import APP_TITLE
 
 
 def _free_port() -> int:
@@ -32,7 +33,7 @@ def _run_server(port: int) -> None:
 
 
 def main(argv: Optional[List[str]] = None) -> int:
-    parser = argparse.ArgumentParser(description="easy_kicad desktop launcher")
+    parser = argparse.ArgumentParser(description=f"{APP_TITLE} desktop launcher")
     parser.add_argument("--serve-only", action="store_true", help="Run the FastAPI server without pywebview")
     parser.add_argument("--port", type=int, default=0, help="Port to bind the local server to")
     args = parser.parse_args(argv)
@@ -53,7 +54,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     _wait_for_server(port)
 
     webview.create_window(
-        "easy_kicad",
+        APP_TITLE,
         f"http://127.0.0.1:{port}",
         width=1440,
         height=960,

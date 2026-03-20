@@ -1,9 +1,26 @@
 [project]
 name = "easy-kicad"
 version = "0.1.0"
-description = "Desktop GUI for importing LCSC parts into KiCad with preview support"
+description = "Desktop GUI for importing LCSC parts into KiCad with live preview support"
 readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.9"
+keywords = ["easyeda", "kicad", "lcsc", "electronics", "desktop"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Desktop Environment",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+]
 dependencies = [
     "easyeda2kicad>=0.8.0",
     "fastapi>=0.128.8",
@@ -24,5 +41,16 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
+    "pyinstaller>=6.16.0",
     "pytest>=8.4.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.uv.build-backend]
+source-include = [
+    "docs/**",
+    "scripts/**",
+    "tests/**",
 ]

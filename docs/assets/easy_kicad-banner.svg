@@ -1,0 +1,45 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="640" rx="36" fill="#FFF7ED"/>
+  <rect x="24" y="24" width="1232" height="592" rx="28" fill="url(#panel)"/>
+  <path d="M93 123C93 105.327 107.327 91 125 91H683C700.673 91 715 105.327 715 123V239C715 256.673 700.673 271 683 271H125C107.327 271 93 256.673 93 239V123Z" fill="#111827" fill-opacity="0.94"/>
+  <path d="M93 306C93 288.327 107.327 274 125 274H1155C1172.67 274 1187 288.327 1187 306V514C1187 531.673 1172.67 546 1155 546H125C107.327 546 93 531.673 93 514V306Z" fill="white" fill-opacity="0.92"/>
+  <path d="M783 120C783 104.536 795.536 92 811 92H1158C1173.46 92 1186 104.536 1186 120V239C1186 254.464 1173.46 267 1158 267H811C795.536 267 783 254.464 783 239V120Z" fill="#FB923C" fill-opacity="0.16" stroke="#FDBA74" stroke-width="2"/>
+  <circle cx="848" cy="147" r="21" fill="#F97316"/>
+  <path d="M848 136V158" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <path d="M837 147H859" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <text x="126" y="154" fill="#F9FAFB" font-size="58" font-family="Verdana, sans-serif" font-weight="700">easy_kicad</text>
+  <text x="126" y="204" fill="#FDBA74" font-size="26" font-family="Verdana, sans-serif">LCSC to KiCad importer with live preview</text>
+  <text x="808" y="154" fill="#9A3412" font-size="28" font-family="Verdana, sans-serif" font-weight="700">Import Flow</text>
+  <text x="808" y="192" fill="#7C2D12" font-size="19" font-family="Verdana, sans-serif">Search part</text>
+  <text x="964" y="192" fill="#7C2D12" font-size="19" font-family="Verdana, sans-serif">Preview assets</text>
+  <text x="808" y="224" fill="#7C2D12" font-size="19" font-family="Verdana, sans-serif">Configure path</text>
+  <text x="964" y="224" fill="#7C2D12" font-size="19" font-family="Verdana, sans-serif">Import to KiCad</text>
+  <rect x="133" y="322" width="280" height="180" rx="20" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2"/>
+  <rect x="443" y="322" width="280" height="180" rx="20" fill="#FFFBEB" stroke="#FDE68A" stroke-width="2"/>
+  <rect x="753" y="322" width="280" height="180" rx="20" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="165" y="365" fill="#9A3412" font-size="22" font-family="Verdana, sans-serif" font-weight="700">Symbol</text>
+  <text x="475" y="365" fill="#92400E" font-size="22" font-family="Verdana, sans-serif" font-weight="700">Footprint</text>
+  <text x="785" y="365" fill="#1D4ED8" font-size="22" font-family="Verdana, sans-serif" font-weight="700">3D Model</text>
+  <rect x="187" y="392" width="88" height="38" rx="10" stroke="#EA580C" stroke-width="3"/>
+  <path d="M275 411H360" stroke="#EA580C" stroke-width="3" stroke-linecap="round"/>
+  <path d="M360 392V430" stroke="#EA580C" stroke-width="3" stroke-linecap="round"/>
+  <rect x="498" y="394" width="50" height="28" rx="5" fill="#D97706"/>
+  <rect x="618" y="394" width="50" height="28" rx="5" fill="#D97706"/>
+  <path d="M548 408H618" stroke="#92400E" stroke-width="3" stroke-linecap="round"/>
+  <path d="M808 431L852 392L905 415L964 380L981 435" stroke="#2563EB" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="852" cy="392" r="8" fill="#60A5FA"/>
+  <circle cx="905" cy="415" r="8" fill="#60A5FA"/>
+  <circle cx="964" cy="380" r="8" fill="#60A5FA"/>
+  <rect x="1063" y="322" width="96" height="180" rx="20" fill="#111827"/>
+  <text x="1081" y="367" fill="#F9FAFB" font-size="18" font-family="Verdana, sans-serif" font-weight="700">Ready</text>
+  <text x="1081" y="401" fill="#9CA3AF" font-size="14" font-family="Verdana, sans-serif">Proxy</text>
+  <text x="1081" y="427" fill="#9CA3AF" font-size="14" font-family="Verdana, sans-serif">SSL</text>
+  <text x="1081" y="453" fill="#9CA3AF" font-size="14" font-family="Verdana, sans-serif">Library</text>
+  <rect x="1081" y="470" width="60" height="10" rx="5" fill="#F97316"/>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1280" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7ED"/>
+      <stop offset="1" stop-color="#FFEDD5"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from easy_kicad.api.routes import router
 from easy_kicad.core.settings import SettingsStore
+from easy_kicad.metadata import APP_TITLE
 from easy_kicad.services.easyeda_adapter import EasyedaPartService
 
 
@@ -17,7 +18,7 @@ def create_app(
     settings_store: Optional[SettingsStore] = None,
     part_service: Optional[EasyedaPartService] = None,
 ) -> FastAPI:
-    app = FastAPI(title="easy_kicad")
+    app = FastAPI(title=APP_TITLE)
     app.state.settings_store = settings_store or SettingsStore()
     app.state.part_service = part_service or EasyedaPartService()
     app.include_router(router)

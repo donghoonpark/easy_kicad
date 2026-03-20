@@ -5,6 +5,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
+from easy_kicad.metadata import APP_NAME
+
 
 def _default_library_root() -> str:
     return str(Path.home() / "Documents" / "KiCad")
@@ -12,7 +14,7 @@ def _default_library_root() -> str:
 
 class AppSettings(BaseModel):
     library_root: str = Field(default_factory=_default_library_root)
-    library_name: str = "easy_kicad"
+    library_name: str = APP_NAME
     overwrite: bool = False
     project_relative_3d: bool = False
     symbol_format: Literal["v6", "v5"] = "v6"

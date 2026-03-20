@@ -2,7 +2,12 @@
 .uv-cache/
 .pytest_cache/
 .tmp-live/
+build/
+dist/
+release/
 frontend/node_modules/
 frontend/.vite/
+*.egg-info/
+.DS_Store
 __pycache__/
 *.pyc

@@ -21,6 +21,7 @@ import {
   createDiscreteApi,
 } from 'naive-ui'
 
+import { appDescription, appName, appTagline } from '@/branding'
 import ModelPreview from '@/components/ModelPreview.vue'
 import PreviewCard from '@/components/PreviewCard.vue'
 import type {
@@ -32,7 +33,7 @@ import type {
 
 const defaultSettings = (): AppSettings => ({
   library_root: '',
-  library_name: 'easy_kicad',
+  library_name: appName,
   overwrite: false,
   project_relative_3d: false,
   symbol_format: 'v6',
@@ -174,20 +175,15 @@ onMounted(async () => {
       <main class="app-shell__content">
           <section class="hero-panel">
             <div class="hero-panel__copy">
-              <span class="eyebrow">LCSC to KiCad importer</span>
-              <h1>easy_kicad</h1>
-              <p>
-                Search an LCSC number, preview the generated symbol, footprint,
-                and 3D model, then import everything into your KiCad library
-                with one click.
-              </p>
+              <span class="eyebrow">{{ appTagline }}</span>
+              <h1>{{ appName }}</h1>
+              <p>{{ appDescription }}</p>
             </div>
             <div class="hero-panel__actions">
               <n-tooltip trigger="hover">
                 <template #trigger>
                   <n-button
                     class="settings-trigger"
-                    secondary
                     circle
                     size="large"
                     aria-label="Open settings"
