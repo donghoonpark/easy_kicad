@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 import html
 import math
 import re
@@ -11,6 +12,25 @@ from easyeda2kicad.kicad.parameters_kicad_symbol import (
     KiSymbolBezier,
     KiSymbolPin,
 )
+
+PIN_LABEL_FONT_SIZE = 2.1
+VERTICAL_PIN_LABEL_FONT_SIZE = 1.8
+PIN_LABEL_OFFSET = 1.8
+PIN_LABEL_VERTICAL_X_OFFSET = 0.7
+PIN_LABEL_VERTICAL_Y_OFFSET = 1.2
+PIN_LABEL_CHAR_WIDTH = 0.62
+PIN_LABEL_LINE_HEIGHT = 1.0
+
+
+@dataclass(frozen=True)
+class PinLabelLayout:
+    text: str
+    x: float
+    y: float
+    anchor: str
+    font_size: float
+    is_vertical: bool
+    transform: Optional[str] = None
 
 
 def _svg_bounds(points: Iterable[tuple[float, float]], padding: float = 4.0) -> str:
@@ -73,14 +93,102 @@ def _pin_end(pin: KiSymbolPin) -> tuple[float, float]:
     return end_x, end_y
 
 
+def _pin_orientation(pin: KiSymbolPin) -> int:
+    return int(round(pin.orientation)) % 360
+
+
+def _pin_label_layout(pin: KiSymbolPin, end_x: float, end_y: float) -> PinLabelLayout:
+    orientation = _pin_orientation(pin)
+    label_text = pin.name or pin.number
+    screen_end_y = _screen_y(end_y)
+
+    if orientation == 180:
+        return PinLabelLayout(
+            text=label_text,
+            x=end_x - PIN_LABEL_OFFSET,
+            y=screen_end_y,
+            anchor="end",
+            font_size=PIN_LABEL_FONT_SIZE,
+            is_vertical=False,
+        )
+
+    if orientation == 90:
+        label_x = end_x + PIN_LABEL_VERTICAL_X_OFFSET
+        label_y = screen_end_y - PIN_LABEL_VERTICAL_Y_OFFSET
+        return PinLabelLayout(
+            text=label_text,
+            x=label_x,
+            y=label_y,
+            anchor="end",
+            font_size=VERTICAL_PIN_LABEL_FONT_SIZE,
+            is_vertical=True,
+            transform=f"rotate(-90 {label_x:.2f} {label_y:.2f})",
+        )
+
+    if orientation == 270:
+        label_x = end_x - PIN_LABEL_VERTICAL_X_OFFSET
+        label_y = screen_end_y + PIN_LABEL_VERTICAL_Y_OFFSET
+        return PinLabelLayout(
+            text=label_text,
+            x=label_x,
+            y=label_y,
+            anchor="start",
+            font_size=VERTICAL_PIN_LABEL_FONT_SIZE,
+            is_vertical=True,
+            transform=f"rotate(-90 {label_x:.2f} {label_y:.2f})",
+        )
+
+    return PinLabelLayout(
+        text=label_text,
+        x=end_x + PIN_LABEL_OFFSET,
+        y=screen_end_y,
+        anchor="start",
+        font_size=PIN_LABEL_FONT_SIZE,
+        is_vertical=False,
+    )
+
+
+def _pin_label_bounds(layout: PinLabelLayout) -> tuple[tuple[float, float], tuple[float, float]]:
+    text_width = max(len(layout.text), 1) * layout.font_size * PIN_LABEL_CHAR_WIDTH
+    text_height = layout.font_size * PIN_LABEL_LINE_HEIGHT
+
+    if not layout.is_vertical:
+        if layout.anchor == "end":
+            min_x = layout.x - text_width
+            max_x = layout.x
+        elif layout.anchor == "middle":
+            min_x = layout.x - (text_width / 2)
+            max_x = layout.x + (text_width / 2)
+        else:
+            min_x = layout.x
+            max_x = layout.x + text_width
+        min_y = layout.y - (text_height / 2)
+        max_y = layout.y + (text_height / 2)
+        return (min_x, min_y), (max_x, max_y)
+
+    min_x = layout.x - (text_height / 2)
+    max_x = layout.x + (text_height / 2)
+    if layout.anchor == "end":
+        min_y = layout.y - text_width
+        max_y = layout.y
+    else:
+        min_y = layout.y
+        max_y = layout.y + text_width
+    return (min_x, min_y), (max_x, max_y)
+
+
 def _symbol_bounds(symbol: KiSymbol) -> list[tuple[float, float]]:
     points: list[tuple[float, float]] = []
     for pin in symbol.pins:
         end_x, end_y = _pin_end(pin)
+        label_layout = _pin_label_layout(pin, end_x, end_y)
+        label_min, label_max = _pin_label_bounds(label_layout)
         points.extend(
             [
                 (pin.pos_x, _screen_y(pin.pos_y)),
                 (end_x, _screen_y(end_y)),
+                label_min,
+                label_max,
             ]
         )
     for rectangle in symbol.rectangles:
@@ -183,25 +291,18 @@ def render_symbol_svg(symbol: KiSymbol) -> str:
 
     for pin in symbol.pins:
         end_x, end_y = _pin_end(pin)
+        label_layout = _pin_label_layout(pin, end_x, end_y)
         elements.append(
             f'<line x1="{pin.pos_x:.2f}" y1="{_screen_y(pin.pos_y):.2f}" '
             f'x2="{end_x:.2f}" y2="{_screen_y(end_y):.2f}" '
             'stroke="#0f172a" stroke-width="0.4" />'
         )
-        if pin.orientation == 180:
-            label_x = end_x - 1.8
-            anchor = "end"
-        elif pin.orientation in (90, 270):
-            label_x = end_x
-            anchor = "middle"
-        else:
-            label_x = end_x + 1.8
-            anchor = "start"
-        label_y = _screen_y(end_y) - 0.8
+        transform_attr = f' transform="{label_layout.transform}"' if label_layout.transform else ""
         elements.append(
-            f'<text x="{label_x:.2f}" y="{label_y:.2f}" '
-            f'font-size="2.1" fill="#334155" text-anchor="{anchor}">'
-            f"{html.escape(pin.name or pin.number)}"
+            f'<text x="{label_layout.x:.2f}" y="{label_layout.y:.2f}" '
+            f'font-size="{label_layout.font_size:.1f}" fill="#334155" '
+            f'text-anchor="{label_layout.anchor}" dominant-baseline="middle"{transform_attr}>'
+            f"{html.escape(label_layout.text)}"
             "</text>"
         )
 
