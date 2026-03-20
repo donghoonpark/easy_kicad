@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="140" y1="120" x2="884" y2="920" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E293B" />
+      <stop offset="0.52" stop-color="#0F172A" />
+      <stop offset="1" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="chip" x1="312" y1="280" x2="716" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FB923C" />
+      <stop offset="1" stop-color="#F97316" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(292 228) rotate(47.5) scale(516 486)">
+      <stop stop-color="#FDBA74" stop-opacity="0.38" />
+      <stop offset="1" stop-color="#FDBA74" stop-opacity="0" />
+    </radialGradient>
+    <filter id="shadow" x="194" y="214" width="636" height="636" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#020617" flood-opacity="0.32" />
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)" />
+  <rect width="1024" height="1024" rx="224" fill="url(#glow)" />
+
+  <g opacity="0.1" stroke="#94A3B8" stroke-width="10">
+    <path d="M128 256H896" />
+    <path d="M128 512H896" />
+    <path d="M128 768H896" />
+    <path d="M256 128V896" />
+    <path d="M512 128V896" />
+    <path d="M768 128V896" />
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="248" y="248" width="528" height="528" rx="156" fill="#E2E8F0" fill-opacity="0.08" />
+    <rect x="296" y="296" width="432" height="432" rx="132" fill="url(#chip)" />
+    <rect x="360" y="360" width="304" height="304" rx="88" stroke="#F8FAFC" stroke-width="30" />
+  </g>
+
+  <g stroke="#F8FAFC" stroke-linecap="round" stroke-width="26">
+    <path d="M214 402H296" />
+    <path d="M214 512H296" />
+    <path d="M214 622H296" />
+    <path d="M728 402H810" />
+    <path d="M728 512H810" />
+    <path d="M728 622H810" />
+    <path d="M402 214V296" />
+    <path d="M512 214V296" />
+    <path d="M622 214V296" />
+    <path d="M402 728V810" />
+    <path d="M512 728V810" />
+    <path d="M622 728V810" />
+  </g>
+
+  <g fill="#F8FAFC">
+    <circle cx="214" cy="402" r="18" />
+    <circle cx="214" cy="512" r="18" />
+    <circle cx="214" cy="622" r="18" />
+    <circle cx="810" cy="402" r="18" />
+    <circle cx="810" cy="512" r="18" />
+    <circle cx="810" cy="622" r="18" />
+    <circle cx="402" cy="214" r="18" />
+    <circle cx="512" cy="214" r="18" />
+    <circle cx="622" cy="214" r="18" />
+    <circle cx="402" cy="810" r="18" />
+    <circle cx="512" cy="810" r="18" />
+    <circle cx="622" cy="810" r="18" />
+  </g>
+
+  <path
+    d="M386 560H454L516 456L592 618L654 528H694"
+    stroke="#FFF7ED"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="34"
+  />
+</svg>

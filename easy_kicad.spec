@@ -1,8 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
 import platform
+from pathlib import Path
 
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
+
+BUILD_VARIANT = os.environ.get("EASY_KICAD_BUILD_VARIANT", "release").strip().lower()
+APP_BUNDLE_NAME = "easy_kicad_debug" if BUILD_VARIANT == "debug" else "easy_kicad"
+ICON_DIR = Path("docs") / "assets" / "icons"
 
 datas = collect_data_files("easy_kicad", includes=["web/**/*"])
 hiddenimports = collect_submodules("webview.platforms")
@@ -10,6 +16,15 @@ excludes = ["PyQt5", "PySide2", "PySide6", "tkinter"]
 
 if platform.system() != "Linux":
     excludes.append("PyQt6")
+
+if platform.system() == "Windows":
+    icon_path = ICON_DIR / "easy_kicad.ico"
+elif platform.system() == "Darwin":
+    icon_path = ICON_DIR / "easy_kicad.icns"
+else:
+    icon_path = None
+
+icon = str(icon_path) if icon_path is not None and icon_path.exists() else None
 
 
 a = Analysis(
@@ -32,12 +47,13 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="easy_kicad",
+    name=APP_BUNDLE_NAME,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,
+    console=BUILD_VARIANT == "debug",
+    icon=icon,
 )
 
 coll = COLLECT(
@@ -48,5 +64,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name="easy_kicad",
+    name=APP_BUNDLE_NAME,
 )

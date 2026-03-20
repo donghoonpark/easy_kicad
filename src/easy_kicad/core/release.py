@@ -42,8 +42,11 @@ def artifact_stem(
     *,
     system: Optional[str] = None,
     machine: Optional[str] = None,
+    variant: Optional[str] = None,
 ) -> str:
-    return f"{APP_NAME}-{version or package_version()}-{platform_tag(system, machine)}"
+    normalized_variant = (variant or "").strip().lower().replace("_", "-").replace(" ", "-")
+    variant_suffix = f"-{normalized_variant}" if normalized_variant else ""
+    return f"{APP_NAME}-{version or package_version()}-{platform_tag(system, machine)}{variant_suffix}"
 
 
 def create_release_archive(
@@ -53,12 +56,18 @@ def create_release_archive(
     version: Optional[str] = None,
     system: Optional[str] = None,
     machine: Optional[str] = None,
+    variant: Optional[str] = None,
 ) -> Path:
     if not bundle_dir.exists():
         raise FileNotFoundError(f"Bundle directory does not exist: {bundle_dir}")
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    archive_base = output_dir / artifact_stem(version, system=system, machine=machine)
+    archive_base = output_dir / artifact_stem(
+        version,
+        system=system,
+        machine=machine,
+        variant=variant,
+    )
     archive_format = "zip" if archive_suffix(system) == ".zip" else "gztar"
     archive_path = shutil.make_archive(
         str(archive_base),

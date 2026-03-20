@@ -30,13 +30,19 @@ with a Python desktop backend and a Vue 3 + Naive UI frontend.
 
 ## Quick Start
 
-### 1. Sync Python dependencies
+### 1. Install the recommended Python runtime
+
+```bash
+uv python install 3.11
+```
+
+### 2. Sync Python dependencies
 
 ```bash
 UV_CACHE_DIR=.uv-cache uv sync --group dev
 ```
 
-### 2. Install and build the frontend
+### 3. Install and build the frontend
 
 ```bash
 cd frontend
@@ -45,7 +51,7 @@ npm run build
 cd ..
 ```
 
-### 3. Run the app
+### 4. Run the app
 
 Desktop window:
 
@@ -82,6 +88,14 @@ UV_CACHE_DIR=.uv-cache uv run python scripts/build_release.py
 PyInstaller produces an onedir bundle in `dist/easy_kicad/`, and the helper
 script wraps that bundle into a platform-specific archive in `release/`.
 
+Windows debug bundle with console logging:
+
+```bash
+EASY_KICAD_BUILD_VARIANT=debug UV_CACHE_DIR=.uv-cache \
+uv run pyinstaller easy_kicad.spec --noconfirm --distpath dist-debug --workpath build-debug
+UV_CACHE_DIR=.uv-cache uv run python scripts/build_release.py --dist-dir dist-debug/easy_kicad_debug --variant debug
+```
+
 ## GitHub Setup
 
 This repository includes:
@@ -102,6 +116,7 @@ Current packaged targets:
 
 - `ubuntu-24.04` -> `easy_kicad-<version>-linux-x64.tar.gz`
 - `windows-2025` -> `easy_kicad-<version>-windows-x64.zip`
+- `windows-2025` debug -> `easy_kicad-<version>-windows-x64-debug.zip`
 - `macos-15` -> `easy_kicad-<version>-macos-arm64.tar.gz`
 
 ## Branding Surfaces
@@ -111,6 +126,7 @@ If you want to rebrand the app later, the main rename points are centralized:
 - Python app metadata: `src/easy_kicad/metadata.py`
 - Frontend marketing copy: `frontend/src/branding.ts`
 - README app screenshot: `docs/assets/easy_kicad-ui.png`
+- App icon source: `docs/assets/icons/easy_kicad-icon.svg`
 - Default KiCad library name: `src/easy_kicad/schemas/settings.py`
 
 ## Project Layout
@@ -130,7 +146,7 @@ tests/                   pytest-based unit and API tests
 - 3D preview is based on WRL for fast in-app rendering.
 - STEP files are still exported during import when available.
 - Preview rendering is optimized for quick inspection rather than pixel-perfect KiCad parity.
-- On this machine, `urllib3` can emit a LibreSSL warning under Python 3.9. The app and tests still run.
+- If you previously created `.venv` with macOS system Python 3.9, recreate it with `uv sync --python 3.11 --group dev` to avoid LibreSSL-related `urllib3` warnings.
 - Linux packaging now pulls in the Qt renderer for `pywebview` so GitHub Actions can produce a desktop bundle without relying on a system GTK Python binding.
 
 ## License

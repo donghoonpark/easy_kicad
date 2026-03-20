@@ -3,7 +3,9 @@
 .pytest_cache/
 .tmp-live/
 build/
+build-debug/
 dist/
+dist-debug/
 release/
 frontend/node_modules/
 frontend/.vite/

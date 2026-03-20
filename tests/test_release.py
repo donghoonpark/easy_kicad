@@ -50,6 +50,13 @@ def test_artifact_stem_uses_platform_tag():
     assert artifact_stem("0.4.0", system="Linux", machine="x86_64") == "easy_kicad-0.4.0-linux-x64"
 
 
+def test_artifact_stem_appends_variant_suffix():
+    assert (
+        artifact_stem("0.4.0", system="Windows", machine="AMD64", variant="debug_console")
+        == "easy_kicad-0.4.0-windows-x64-debug-console"
+    )
+
+
 def test_create_release_archive_for_zip(tmp_path: Path):
     bundle_dir = tmp_path / "dist" / "easy_kicad"
     bundle_dir.mkdir(parents=True)
@@ -84,6 +91,25 @@ def test_create_release_archive_for_tar_gz(tmp_path: Path):
     assert archive_path.name == "easy_kicad-0.4.0-macos-arm64.tar.gz"
     with tarfile.open(archive_path, "r:gz") as archive:
         assert "easy_kicad/app.txt" in archive.getnames()
+
+
+def test_create_release_archive_with_variant_suffix(tmp_path: Path):
+    bundle_dir = tmp_path / "dist-debug" / "easy_kicad_debug"
+    bundle_dir.mkdir(parents=True)
+    (bundle_dir / "app.txt").write_text("desktop bundle", encoding="utf-8")
+
+    archive_path = create_release_archive(
+        bundle_dir,
+        tmp_path / "release",
+        version="0.4.0",
+        system="Windows",
+        machine="AMD64",
+        variant="debug",
+    )
+
+    assert archive_path.name == "easy_kicad-0.4.0-windows-x64-debug.zip"
+    with zipfile.ZipFile(archive_path) as archive:
+        assert "easy_kicad_debug/app.txt" in archive.namelist()
 
 
 def test_create_release_archive_requires_bundle_dir(tmp_path: Path):

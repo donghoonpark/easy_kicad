@@ -65,6 +65,16 @@ jobs:
       - name: Pack release archive
         run: uv run python scripts/build_release.py
 
+      - name: Build Windows debug bundle
+        if: matrix.target == 'windows-x64'
+        env:
+          EASY_KICAD_BUILD_VARIANT: debug
+        run: uv run pyinstaller easy_kicad.spec --noconfirm --distpath dist-debug --workpath build-debug
+
+      - name: Pack Windows debug archive
+        if: matrix.target == 'windows-x64'
+        run: uv run python scripts/build_release.py --dist-dir dist-debug/easy_kicad_debug --variant debug
+
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:

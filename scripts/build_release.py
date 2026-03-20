@@ -26,12 +26,18 @@ def main() -> int:
         default=package_version(),
         help="Version string to embed in the archive filename",
     )
+    parser.add_argument(
+        "--variant",
+        default="",
+        help="Optional artifact suffix such as 'debug'",
+    )
     args = parser.parse_args()
 
     archive_path = create_release_archive(
         args.dist_dir,
         args.output_dir,
         version=args.version,
+        variant=args.variant,
     )
     print(archive_path)
     return 0
