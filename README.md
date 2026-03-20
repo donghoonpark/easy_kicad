@@ -1,6 +1,6 @@
 # easy_kicad
 
-![easy_kicad banner](docs/assets/easy_kicad-banner.svg)
+![easy_kicad app screenshot](docs/assets/easy_kicad-ui.png)
 
 `easy_kicad` is a desktop-style importer that takes an LCSC part number,
 previews the generated KiCad assets, and imports the symbol, footprint, and 3D
@@ -104,7 +104,7 @@ If you want to rebrand the app later, the main rename points are centralized:
 
 - Python app metadata: `src/easy_kicad/metadata.py`
 - Frontend marketing copy: `frontend/src/branding.ts`
-- README banner art: `docs/assets/easy_kicad-banner.svg`
+- README app screenshot: `docs/assets/easy_kicad-ui.png`
 - Default KiCad library name: `src/easy_kicad/schemas/settings.py`
 
 ## Project Layout
