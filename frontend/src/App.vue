@@ -250,9 +250,6 @@ onMounted(async () => {
               <template #header>
                 {{ preview.part.name }}
               </template>
-              <template #description>
-                {{ preview.part.manufacturer || 'Unknown manufacturer' }}
-              </template>
               <template #header-extra>
                 <n-space>
                   <n-tag round type="warning">
