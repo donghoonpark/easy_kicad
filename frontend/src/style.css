@@ -77,6 +77,13 @@ textarea {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.settings-trigger {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
 }
 
 .eyebrow {

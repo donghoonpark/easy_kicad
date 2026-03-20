@@ -17,6 +17,7 @@ import {
   NSwitch,
   NTag,
   NThing,
+  NTooltip,
   createDiscreteApi,
 } from 'naive-ui'
 
@@ -182,9 +183,35 @@ onMounted(async () => {
               </p>
             </div>
             <div class="hero-panel__actions">
-              <n-button secondary size="large" @click="drawerOpen = true">
+              <n-tooltip trigger="hover">
+                <template #trigger>
+                  <n-button
+                    class="settings-trigger"
+                    secondary
+                    circle
+                    size="large"
+                    aria-label="Open settings"
+                    @click="drawerOpen = true"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="3.2" />
+                      <path
+                        d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1.2 1.2 0 0 1 0 1.7l-1.2 1.2a1.2 1.2 0 0 1-1.7 0l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a1.2 1.2 0 0 1-1.2 1.2h-1.7A1.2 1.2 0 0 1 9.9 20v-.2a1 1 0 0 0-.6-.9 1 1 0 0 0-1.1.2l-.1.1a1.2 1.2 0 0 1-1.7 0l-1.2-1.2a1.2 1.2 0 0 1 0-1.7l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H4.3A1.2 1.2 0 0 1 3.1 13v-2A1.2 1.2 0 0 1 4.3 9.8h.2a1 1 0 0 0 .9-.6 1 1 0 0 0-.2-1.1l-.1-.1a1.2 1.2 0 0 1 0-1.7l1.2-1.2a1.2 1.2 0 0 1 1.7 0l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V4.3A1.2 1.2 0 0 1 11 3.1h2a1.2 1.2 0 0 1 1.2 1.2v.2a1 1 0 0 0 .6.9 1 1 0 0 0 1.1-.2l.1-.1a1.2 1.2 0 0 1 1.7 0l1.2 1.2a1.2 1.2 0 0 1 0 1.7l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6h.2A1.2 1.2 0 0 1 20.9 11v2a1.2 1.2 0 0 1-1.2 1.2h-.2a1 1 0 0 0-.9.8Z"
+                      />
+                    </svg>
+                  </n-button>
+                </template>
                 Settings
-              </n-button>
+              </n-tooltip>
               <n-button
                 type="primary"
                 size="large"
@@ -211,9 +238,6 @@ onMounted(async () => {
                 />
               </div>
               <n-space>
-                <n-button size="large" secondary @click="drawerOpen = true">
-                  Configure
-                </n-button>
                 <n-button
                   size="large"
                   type="primary"
