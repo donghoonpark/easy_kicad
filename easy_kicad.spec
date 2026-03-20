@@ -11,11 +11,23 @@ APP_BUNDLE_NAME = "easy_kicad_debug" if BUILD_VARIANT == "debug" else "easy_kica
 ICON_DIR = Path("docs") / "assets" / "icons"
 
 datas = collect_data_files("easy_kicad", includes=["web/**/*"])
-hiddenimports = collect_submodules("webview.platforms")
+if platform.system() == "Windows":
+    hiddenimports = ["webview.platforms.qt"]
+elif platform.system() == "Linux":
+    hiddenimports = ["webview.platforms.qt"]
+elif platform.system() == "Darwin":
+    hiddenimports = ["webview.platforms.cocoa"]
+else:
+    hiddenimports = collect_submodules("webview.platforms")
+
 excludes = ["PyQt5", "PySide2", "PySide6", "tkinter"]
 
-if platform.system() != "Linux":
+if platform.system() == "Darwin":
     excludes.append("PyQt6")
+    excludes.append("qtpy")
+
+if platform.system() == "Windows":
+    excludes.extend(["clr", "clr_loader", "pythonnet", "webview.platforms.winforms"])
 
 if platform.system() == "Windows":
     icon_path = ICON_DIR / "easy_kicad.ico"

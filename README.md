@@ -148,6 +148,7 @@ tests/                   pytest-based unit and API tests
 - Preview rendering is optimized for quick inspection rather than pixel-perfect KiCad parity.
 - If you previously created `.venv` with macOS system Python 3.9, recreate it with `uv sync --python 3.11 --group dev` to avoid LibreSSL-related `urllib3` warnings.
 - Linux packaging now pulls in the Qt renderer for `pywebview` so GitHub Actions can produce a desktop bundle without relying on a system GTK Python binding.
+- Windows packaging also uses the Qt backend for `pywebview` to avoid the WinForms/pythonnet startup path in frozen builds.
 
 ## License
 

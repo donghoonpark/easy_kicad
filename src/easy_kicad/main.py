@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import argparse
+import importlib
+import platform
 import socket
+import sys
 import threading
 import time
+from pathlib import Path
 from typing import List, Optional
 
 import uvicorn
@@ -32,6 +36,40 @@ def _run_server(port: int) -> None:
     uvicorn.run(create_app(), host="127.0.0.1", port=port, log_level="info")
 
 
+def _preferred_webview_gui(system: Optional[str] = None) -> Optional[str]:
+    normalized = (system or platform.system() or "").strip().lower()
+    if normalized in {"windows", "linux"}:
+        return "qt"
+    return None
+
+
+def _is_debug_webview_runtime(executable: Optional[str] = None) -> bool:
+    return Path(executable or sys.executable or "").stem.lower().endswith("_debug")
+
+
+def _ensure_webview_backend(gui: Optional[str]) -> None:
+    if gui == "qt":
+        importlib.import_module("webview.platforms.qt")
+
+
+def _start_desktop_window(webview_module, port: int) -> None:
+    gui = _preferred_webview_gui()
+    _ensure_webview_backend(gui)
+
+    webview_module.create_window(
+        APP_TITLE,
+        f"http://127.0.0.1:{port}",
+        width=1440,
+        height=960,
+        min_size=(1100, 760),
+    )
+
+    start_kwargs = {"debug": _is_debug_webview_runtime()}
+    if gui is not None:
+        start_kwargs["gui"] = gui
+    webview_module.start(**start_kwargs)
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=f"{APP_TITLE} desktop launcher")
     parser.add_argument("--serve-only", action="store_true", help="Run the FastAPI server without pywebview")
@@ -53,14 +91,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     server_thread.start()
     _wait_for_server(port)
 
-    webview.create_window(
-        APP_TITLE,
-        f"http://127.0.0.1:{port}",
-        width=1440,
-        height=960,
-        min_size=(1100, 760),
-    )
-    webview.start()
+    _start_desktop_window(webview, port)
     return 0
 
 
