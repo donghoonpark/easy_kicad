@@ -15,7 +15,8 @@ const outputPath = path.join(repoRoot, 'docs', 'assets', 'easy_kicad-ui.png')
 const serverPort = Number.parseInt(process.env.EASY_KICAD_SCREENSHOT_PORT ?? '8765', 10)
 const screenshotDelayMs = Number.parseInt(process.env.EASY_KICAD_SCREENSHOT_DELAY_MS ?? '3500', 10)
 const headless = process.env.EASY_KICAD_SCREENSHOT_HEADLESS === 'true'
-const appUrl = `http://127.0.0.1:${serverPort}`
+const baseUrl = `http://127.0.0.1:${serverPort}`
+const appUrl = `${baseUrl}/?capture=readme`
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -97,7 +98,7 @@ async function main() {
   )
 
   try {
-    await waitForServer(`${appUrl}/api/settings`)
+    await waitForServer(`${baseUrl}/api/settings`)
     await createScreenshot()
   } finally {
     server.kill('SIGTERM')

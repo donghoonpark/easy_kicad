@@ -54,6 +54,9 @@ const importing = ref(false)
 const saving = ref(false)
 const drawerOpen = ref(false)
 const { message } = createDiscreteApi(['message'])
+const marketingCaptureMode =
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).get('capture') === 'readme'
 
 const themeOverrides = {
   common: {
@@ -173,8 +176,8 @@ onMounted(async () => {
   <n-config-provider :theme-overrides="themeOverrides">
     <div class="app-shell">
       <div class="app-shell__backdrop" />
-      <div class="desktop-window">
-        <header class="desktop-window__titlebar">
+      <div :class="marketingCaptureMode ? 'desktop-window' : 'app-shell__frame'">
+        <header v-if="marketingCaptureMode" class="desktop-window__titlebar">
           <div class="desktop-window__traffic-lights" aria-hidden="true">
             <span class="desktop-window__traffic-light desktop-window__traffic-light--close" />
             <span class="desktop-window__traffic-light desktop-window__traffic-light--minimize" />
