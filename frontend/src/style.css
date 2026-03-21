@@ -43,6 +43,10 @@ textarea {
   overflow: hidden;
 }
 
+.app-shell--capture {
+  background: #ffffff;
+}
+
 .app-shell__frame {
   position: relative;
 }
@@ -56,6 +60,11 @@ textarea {
   background-size: 40px 40px;
   mask-image: linear-gradient(180deg, rgba(255, 255, 255, 0.85), transparent);
   pointer-events: none;
+}
+
+.app-shell--capture .app-shell__backdrop {
+  opacity: 0.2;
+  mask-image: none;
 }
 
 .desktop-window {

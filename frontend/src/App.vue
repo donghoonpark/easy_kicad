@@ -174,7 +174,7 @@ onMounted(async () => {
 
 <template>
   <n-config-provider :theme-overrides="themeOverrides">
-    <div class="app-shell">
+    <div :class="['app-shell', { 'app-shell--capture': marketingCaptureMode }]">
       <div class="app-shell__backdrop" />
       <div :class="marketingCaptureMode ? 'desktop-window' : 'app-shell__frame'">
         <header v-if="marketingCaptureMode" class="desktop-window__titlebar">

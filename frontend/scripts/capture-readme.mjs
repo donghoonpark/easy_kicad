@@ -71,6 +71,11 @@ async function createScreenshot() {
       const status = document.querySelector('.model-preview__status')
       return !status
     }, { timeout: 30_000 })
+    await page.waitForTimeout(300)
+    await page.waitForFunction(
+      () => document.querySelectorAll('.n-message').length === 0,
+      { timeout: 10_000 },
+    )
 
     await page.waitForTimeout(screenshotDelayMs)
 

@@ -2,13 +2,13 @@
 
 <p align="center">
   <a href="https://github.com/donghoonpark/easy_kicad/releases/latest">
-    <img alt="Download the latest release" src="https://img.shields.io/badge/Download-Latest%20Release-DD6B20?style=for-the-badge">
+    <img alt="Download for Windows" src="https://img.shields.io/badge/Windows-Download-0078D6?style=for-the-badge&logo=windows&logoColor=white">
   </a>
-</p>
-
-<p align="center">
   <a href="https://github.com/donghoonpark/easy_kicad/releases/latest">
-    <img alt="Latest version" src="https://img.shields.io/github/v/release/donghoonpark/easy_kicad?display_name=tag&label=Latest%20Version">
+    <img alt="Download for macOS" src="https://img.shields.io/badge/macOS-Download-111827?style=for-the-badge&logo=apple&logoColor=white">
+  </a>
+  <a href="https://github.com/donghoonpark/easy_kicad/releases/latest">
+    <img alt="Download for Linux" src="https://img.shields.io/badge/Linux-Download-F59E0B?style=for-the-badge&logo=linux&logoColor=white">
   </a>
 </p>
 
@@ -29,10 +29,6 @@ It is powered by
 - Configure library path, proxy, custom CA bundle, overwrite mode, and SSL verification behavior
 
 ## Download
-
-Get the newest build from the latest release page:
-
-- [Latest release](https://github.com/donghoonpark/easy_kicad/releases/latest)
 
 Recommended files:
 
