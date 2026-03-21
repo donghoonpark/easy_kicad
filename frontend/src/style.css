@@ -41,6 +41,7 @@ textarea {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
+  padding: 22px 16px 36px;
 }
 
 .app-shell__backdrop {
@@ -54,11 +55,107 @@ textarea {
   pointer-events: none;
 }
 
-.app-shell__content {
+.desktop-window {
   position: relative;
   width: min(1400px, calc(100vw - 32px));
   margin: 0 auto;
-  padding: 32px 0 48px;
+  border-radius: 30px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(12, 20, 35, 0.94), rgba(9, 15, 28, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow:
+    0 26px 80px rgba(2, 6, 23, 0.44),
+    0 6px 24px rgba(15, 23, 42, 0.28);
+  backdrop-filter: blur(28px);
+}
+
+.desktop-window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 18%),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 46%);
+}
+
+.desktop-window__titlebar {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 22px;
+  background:
+    linear-gradient(180deg, rgba(30, 41, 59, 0.78), rgba(15, 23, 42, 0.5)),
+    rgba(15, 23, 42, 0.82);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.desktop-window__traffic-lights {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.desktop-window__traffic-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.28),
+    0 1px 2px rgba(15, 23, 42, 0.2);
+}
+
+.desktop-window__traffic-light--close {
+  background: #ff5f57;
+}
+
+.desktop-window__traffic-light--minimize {
+  background: #febc2e;
+}
+
+.desktop-window__traffic-light--maximize {
+  background: #28c840;
+}
+
+.desktop-window__title-group {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.desktop-window__title {
+  color: #f8fafc;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.desktop-window__subtitle {
+  color: #94a3b8;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.desktop-window__status {
+  justify-self: end;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #cbd5e1;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  background: rgba(15, 23, 42, 0.54);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.app-shell__content {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 26px 22px 42px;
 }
 
 .hero-panel {
@@ -309,9 +406,27 @@ textarea {
 }
 
 @media (max-width: 900px) {
-  .app-shell__content {
+  .app-shell {
+    padding: 12px 12px 24px;
+  }
+
+  .desktop-window {
     width: min(100vw - 24px, 100%);
-    padding-top: 24px;
+    border-radius: 24px;
+  }
+
+  .desktop-window__titlebar {
+    grid-template-columns: auto 1fr;
+    row-gap: 10px;
+  }
+
+  .desktop-window__status {
+    display: none;
+  }
+
+  .app-shell__content {
+    width: min(100%, 100vw - 24px);
+    padding-top: 20px;
   }
 
   .hero-panel {

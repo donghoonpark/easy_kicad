@@ -173,7 +173,21 @@ onMounted(async () => {
   <n-config-provider :theme-overrides="themeOverrides">
     <div class="app-shell">
       <div class="app-shell__backdrop" />
-      <main class="app-shell__content">
+      <div class="desktop-window">
+        <header class="desktop-window__titlebar">
+          <div class="desktop-window__traffic-lights" aria-hidden="true">
+            <span class="desktop-window__traffic-light desktop-window__traffic-light--close" />
+            <span class="desktop-window__traffic-light desktop-window__traffic-light--minimize" />
+            <span class="desktop-window__traffic-light desktop-window__traffic-light--maximize" />
+          </div>
+          <div class="desktop-window__title-group">
+            <span class="desktop-window__title">{{ appName }}</span>
+            <span class="desktop-window__subtitle">{{ appTagline }}</span>
+          </div>
+          <div class="desktop-window__status">Desktop build</div>
+        </header>
+
+        <main class="app-shell__content">
           <section class="hero-panel">
             <div class="hero-panel__copy">
               <span class="eyebrow">{{ appTagline }}</span>
@@ -314,7 +328,8 @@ onMounted(async () => {
             <p><strong>Footprint:</strong> {{ importResult.footprintFile }}</p>
             <p><strong>3D models:</strong> {{ importResult.modelDirectory }}</p>
           </n-alert>
-      </main>
+        </main>
+      </div>
 
       <n-drawer v-model:show="drawerOpen" :width="420" placement="right">
         <n-drawer-content title="easy_kicad settings" closable>
