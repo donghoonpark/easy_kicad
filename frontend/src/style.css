@@ -86,7 +86,7 @@ textarea {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 18px;
-  padding: 16px 22px;
+  padding: 12px 18px;
   background:
     linear-gradient(180deg, rgba(30, 41, 59, 0.78), rgba(15, 23, 42, 0.5)),
     rgba(15, 23, 42, 0.82);
@@ -119,36 +119,18 @@ textarea {
   background: #28c840;
 }
 
-.desktop-window__title-group {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  min-width: 0;
-}
-
 .desktop-window__title {
+  justify-self: center;
   color: #f8fafc;
-  font-size: 0.92rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-.desktop-window__subtitle {
-  color: #94a3b8;
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.desktop-window__status {
+.desktop-window__spacer {
+  width: 52px;
+  height: 1px;
   justify-self: end;
-  padding: 6px 12px;
-  border-radius: 999px;
-  color: #cbd5e1;
-  font-size: 0.74rem;
-  letter-spacing: 0.04em;
-  background: rgba(15, 23, 42, 0.54);
-  border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .app-shell__content {
@@ -420,7 +402,7 @@ textarea {
     row-gap: 10px;
   }
 
-  .desktop-window__status {
+  .desktop-window__spacer {
     display: none;
   }
 

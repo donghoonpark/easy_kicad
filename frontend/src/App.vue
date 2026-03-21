@@ -180,11 +180,8 @@ onMounted(async () => {
             <span class="desktop-window__traffic-light desktop-window__traffic-light--minimize" />
             <span class="desktop-window__traffic-light desktop-window__traffic-light--maximize" />
           </div>
-          <div class="desktop-window__title-group">
-            <span class="desktop-window__title">{{ appName }}</span>
-            <span class="desktop-window__subtitle">{{ appTagline }}</span>
-          </div>
-          <div class="desktop-window__status">Desktop build</div>
+          <span class="desktop-window__title">{{ appName }}</span>
+          <div class="desktop-window__spacer" aria-hidden="true" />
         </header>
 
         <main class="app-shell__content">
