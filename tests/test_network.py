@@ -2,7 +2,13 @@ from __future__ import annotations
 
 import requests
 
-from easy_kicad.core.network import build_session, build_verify_value, patch_easyeda_requests
+from easy_kicad.core.network import (
+    EASYEDA_BROWSER_HEADERS,
+    build_session,
+    build_verify_value,
+    merge_easyeda_headers,
+    patch_easyeda_requests,
+)
 from easy_kicad.schemas.settings import AppSettings
 
 
@@ -67,4 +73,22 @@ def test_patch_easyeda_requests_passes_timeout_proxy_and_verify(monkeypatch):
         "http": "http://127.0.0.1:8899",
         "https": "http://127.0.0.1:8899",
     }
+    assert captured["kwargs"]["headers"]["User-Agent"] == EASYEDA_BROWSER_HEADERS["User-Agent"]
+    assert captured["kwargs"]["headers"]["Referer"] == EASYEDA_BROWSER_HEADERS["Referer"]
     assert easyeda_api.requests.get is original_get
+
+
+def test_merge_easyeda_headers_overrides_blocked_defaults():
+    headers = merge_easyeda_headers(
+        {
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "User-Agent": "easyeda2kicad v0.8.0",
+        }
+    )
+
+    assert headers["User-Agent"] == EASYEDA_BROWSER_HEADERS["User-Agent"]
+    assert headers["Accept"] == EASYEDA_BROWSER_HEADERS["Accept"]
+    assert headers["Referer"] == EASYEDA_BROWSER_HEADERS["Referer"]
+    assert headers["Origin"] == EASYEDA_BROWSER_HEADERS["Origin"]
+    assert headers["Content-Type"] == "application/x-www-form-urlencoded; charset=UTF-8"
