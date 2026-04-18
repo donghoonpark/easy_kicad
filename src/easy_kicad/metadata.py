@@ -13,4 +13,4 @@ def package_version() -> str:
     try:
         return version(PACKAGE_NAME)
     except PackageNotFoundError:
-        return "0.1.0"
+        return "0.1.2"

@@ -1,6 +1,6 @@
 [project]
 name = "easy-kicad"
-version = "0.1.1"
+version = "0.1.2"
 description = "Desktop GUI for importing LCSC parts into KiCad with live preview support"
 readme = "README.md"
 license = { file = "LICENSE" }
